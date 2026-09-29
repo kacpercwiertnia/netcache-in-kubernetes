@@ -1,0 +1,24 @@
+---
+generated_lab_remote_base_dir: "{{ topology_output_dir }}"
+generated_lab_remote_dir: "{{ generated_lab_remote_base_dir }}/{{ topology_lab_name }}"
+
+netcache_payload_local_dir: ""
+netcache_payload_remote_dir: "/tmp/netcache-kathara-payload"
+
+netcache_topology_db_target_relpath: "p4/topology.db"
+
+generated_netcache_server_host: "0.0.0.0"
+
+generated_netcache_kubectl_command: "microk8s kubectl"
+generated_netcache_local_payload_archive: "/tmp/netcache-kathara-payload.tar.gz"
+generated_netcache_remote_payload_archive: "/tmp/netcache-kathara-payload.tar.gz"
+
+generated_netcache_backend_command: >-
+  pgrep -af '^python3 /netcache/kv_store/server.py' >/dev/null 2>&1 &&
+  pkill -f '^python3 /netcache/kv_store/server.py' || true;
+  mkdir -p /netcache/kv_store/log /work/log;
+  cd /netcache/kv_store &&
+  nohup python3 /netcache/kv_store/server.py
+  --host {{ generated_netcache_server_host }}
+  --port 50000
+  >/work/netcache-server.log 2>&1 </dev/null &

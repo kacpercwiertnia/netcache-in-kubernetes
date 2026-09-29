@@ -1,0 +1,539 @@
+---
+- name: Build generated lab paths
+  ansible.builtin.set_fact:
+    generated_topology_meta_path: "{{ generated_lab_remote_dir }}/topology.meta.json"
+
+- name: Ensure generated topology metadata exists
+  ansible.builtin.stat:
+    path: "{{ generated_topology_meta_path }}"
+  register: generated_topology_meta_stat
+
+- name: Fail when topology metadata is missing
+  ansible.builtin.assert:
+    that:
+      - generated_topology_meta_stat.stat.exists
+    fail_msg: "Missing topology metadata: {{ generated_topology_meta_path }}"
+
+- name: Load topology metadata
+  ansible.builtin.slurp:
+    src: "{{ generated_topology_meta_path }}"
+  register: generated_topology_meta_raw
+
+- name: Parse topology metadata
+  ansible.builtin.set_fact:
+    generated_topology_meta: "{{ generated_topology_meta_raw.content | b64decode | from_json }}"
+
+- name: Validate topology metadata
+  ansible.builtin.assert:
+    that:
+      - generated_topology_meta.profile == 'mixed-fabric-netcache-node'
+      - generated_topology_meta.netcache is defined
+      - generated_topology_meta.netcache.switches | length > 0
+      - generated_topology_meta.netcache.reachability.backendMode == 'selected-switch-local'
+    fail_msg: "topology.meta.json does not contain the expected NetCache metadata"
+
+- name: Extract NetCache topology facts
+  ansible.builtin.set_fact:
+    generated_netcache_switch_names: "{{ generated_topology_meta.netcache.switches }}"
+    generated_netcache_backend_names: >-
+      {{
+        (
+          generated_topology_meta.hosts
+          | dict2items
+          | selectattr('value.role', 'equalto', 'netcache_backend')
+          | map(attribute='key')
+          | list
+        )
+      }}
+    generated_netcache_topology_db_source: >-
+      {{
+        generated_lab_remote_dir ~ '/' ~
+        (
+          generated_topology_meta.netcache.topology_db_path
+        )
+      }}
+
+- name: Validate payload input
+  ansible.builtin.assert:
+    that:
+      - netcache_payload_local_dir | length > 0
+    fail_msg: "netcache_payload_local_dir must point to the already-prepared NetCache payload on the machine running Ansible"
+
+- name: Remove previous copied payload directory on control-plane
+  ansible.builtin.file:
+    path: "{{ netcache_payload_remote_dir }}"
+    state: absent
+
+- name: Recreate copied payload directory on control-plane
+  ansible.builtin.file:
+    path: "{{ netcache_payload_remote_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Create local NetCache payload archive
+  delegate_to: localhost
+  become: false
+  ansible.builtin.command:
+    argv:
+      - tar
+      - -czf
+      - "{{ generated_netcache_local_payload_archive }}"
+      - -C
+      - "{{ netcache_payload_local_dir }}"
+      - control_plane/controller.py
+      - control_plane/crc.py
+      - kv_store/server.py
+  changed_when: true
+
+- name: Upload NetCache payload archive to control-plane
+  ansible.builtin.copy:
+    src: "{{ generated_netcache_local_payload_archive }}"
+    dest: "{{ generated_netcache_remote_payload_archive }}"
+    mode: "0644"
+
+- name: Unpack NetCache payload on control-plane
+  ansible.builtin.unarchive:
+    src: "{{ generated_netcache_remote_payload_archive }}"
+    dest: "{{ netcache_payload_remote_dir }}"
+    remote_src: true
+
+- name: Remove temporary payload archive from control-plane
+  ansible.builtin.file:
+    path: "{{ generated_netcache_remote_payload_archive }}"
+    state: absent
+
+- name: Remove local temporary payload archive
+  delegate_to: localhost
+  become: false
+  ansible.builtin.file:
+    path: "{{ generated_netcache_local_payload_archive }}"
+    state: absent
+
+- name: Ensure dynamic topology.db exists
+  ansible.builtin.stat:
+    path: "{{ generated_netcache_topology_db_source }}"
+  register: generated_topology_db_stat
+
+- name: Fail if dynamic topology.db is missing
+  ansible.builtin.assert:
+    that:
+      - generated_topology_db_stat.stat.exists
+    fail_msg: "Missing generated topology.db at {{ generated_netcache_topology_db_source }}"
+
+- name: Discover Kathara pods via microk8s
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    get pods -A --no-headers
+    --sort-by=.metadata.creationTimestamp
+    -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name
+  register: generated_kathara_pods
+  changed_when: false
+
+- name: Build NetCache switch pod info list
+  ansible.builtin.set_fact:
+    generated_netcache_switch_infos: "{{ (generated_netcache_switch_infos | default([])) + [generated_netcache_switch_info_item] }}"
+  vars:
+    generated_netcache_switch_info_pod_line: >-
+      {{
+        (generated_kathara_pods.stdout_lines
+         | select('search', 'kathara-' ~ item ~ '-')
+         | list
+         | last)
+         | default('')
+      }}
+    generated_netcache_switch_info_item:
+      name: "{{ item }}"
+      namespace: "{{ generated_netcache_switch_info_pod_line.split()[0] if generated_netcache_switch_info_pod_line | length > 0 else '' }}"
+      pod: "{{ generated_netcache_switch_info_pod_line.split()[1] if generated_netcache_switch_info_pod_line | length > 0 else '' }}"
+      meta: "{{ generated_topology_meta.switches[item] }}"
+      cli_source: "{{ generated_lab_remote_dir }}/{{ item }}/{{ item }}.cli"
+  loop: "{{ generated_netcache_switch_names }}"
+
+- name: Build NetCache backend pod info list
+  ansible.builtin.set_fact:
+    generated_netcache_backend_infos: "{{ (generated_netcache_backend_infos | default([])) + [generated_netcache_backend_info_item] }}"
+  vars:
+    generated_netcache_backend_pod_line: >-
+      {{
+        (generated_kathara_pods.stdout_lines
+         | select('search', 'kathara-' ~ item ~ '-')
+         | list
+         | last)
+         | default('')
+      }}
+    generated_netcache_backend_info_item:
+      name: "{{ item }}"
+      namespace: "{{ generated_netcache_backend_pod_line.split()[0] if generated_netcache_backend_pod_line | length > 0 else '' }}"
+      pod: "{{ generated_netcache_backend_pod_line.split()[1] if generated_netcache_backend_pod_line | length > 0 else '' }}"
+      meta: "{{ generated_topology_meta.hosts[item] }}"
+  loop: "{{ generated_netcache_backend_names }}"
+
+- name: Validate resolved pod lines
+  ansible.builtin.assert:
+    that:
+      - generated_netcache_backend_names | length == generated_netcache_switch_names | length
+      - generated_netcache_switch_infos | selectattr('pod', 'equalto', '') | list | length == 0
+      - generated_netcache_backend_infos | selectattr('pod', 'equalto', '') | list | length == 0
+    fail_msg: >-
+      Could not resolve one or more Kathara pods.
+      switches={{ generated_netcache_switch_infos }},
+      backends={{ generated_netcache_backend_infos }},
+
+- name: Ensure payload base dir exists in NetCache switch pod
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "mkdir -p /netcache"
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Stream payload into NetCache switch pod
+  ansible.builtin.shell: |
+    set -euo pipefail
+    tar -C {{ netcache_payload_remote_dir }} -cf - . |
+    {{ generated_netcache_kubectl_command }} exec -i -n {{ item.namespace }} {{ item.pod }} -- sh -lc "mkdir -p /netcache && tar -C /netcache -xf -"
+  args:
+    executable: /bin/bash
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Ensure topology.db parent exists in NetCache switch pod
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "mkdir -p /netcache/{{ netcache_topology_db_target_relpath | dirname }}"
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Copy compiled NetCache P4 JSON into NetCache switch pod
+  ansible.builtin.shell: >-
+    cat /home/shared/p4/netcache.json |
+    {{ generated_netcache_kubectl_command }}
+    exec -i -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "cat > /netcache/p4/netcache.json"
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Copy dynamic topology.db into NetCache switch pod
+  ansible.builtin.shell: >-
+    cat {{ generated_netcache_topology_db_source }} |
+    {{ generated_netcache_kubectl_command }}
+    exec -i -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "cat > /netcache/{{ netcache_topology_db_target_relpath }}"
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Ensure backend payload dir exists in server pod
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "mkdir -p /netcache/kv_store"
+  loop: "{{ generated_netcache_backend_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Stream kv_store into backend pods
+  ansible.builtin.shell: |
+    set -euo pipefail
+    tar -C {{ netcache_payload_remote_dir }}/kv_store -cf - . |
+    {{ generated_netcache_kubectl_command }} exec -i -n {{ item.namespace }} {{ item.pod }} -- sh -lc "mkdir -p /netcache/kv_store && tar -C /netcache/kv_store -xf -"
+  args:
+    executable: /bin/bash
+  loop: "{{ generated_netcache_backend_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Ensure backend log directories exist in server pod
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "mkdir -p /netcache/kv_store/log /work/log"
+  loop: "{{ generated_netcache_backend_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Start backend server in backend pods
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "{{ generated_netcache_backend_command }}"
+  loop: "{{ generated_netcache_backend_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Ensure work log directory exists in switch pod
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "mkdir -p /work/log"
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Stop previous simple_switch in generated NetCache switch pod
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "pkill -f simple_switch || true;
+     sleep 1;
+     rm -f /tmp/bmv2-*.ipc /tmp/bmv2-*-notifications.ipc || true"
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+  failed_when: false
+
+- name: Configure graph-node NetCache Linux control-plane addressing
+  ansible.builtin.shell: |
+    {{ generated_netcache_kubectl_command }} exec -i -n {{ item.namespace }} {{ item.pod }} -- sh <<'EOF'
+    set -eu
+    ip link set lo up
+    ip addr replace {{ item.meta.control_plane.loopback }} dev lo
+    {% for port in item.meta.control_plane.ports | default([]) %}
+    ip link set {{ port.ifname }} up
+    ip addr replace {{ port.ip }} dev {{ port.ifname }}
+    {% endfor %}
+    {% for route in item.meta.control_plane.routes | default([]) %}
+    ip route replace {{ route.prefix }} via {{ route.via }} dev {{ route.dev }}
+    {% endfor %}
+    if command -v iptables >/dev/null 2>&1; then
+      iptables -C FORWARD -p udp --dport 50000 -j DROP 2>/dev/null || iptables -I FORWARD 1 -p udp --dport 50000 -j DROP
+      iptables -C FORWARD -p udp --sport 50000 -j DROP 2>/dev/null || iptables -I FORWARD 1 -p udp --sport 50000 -j DROP
+      iptables -C FORWARD -p tcp --dport 50000 -j DROP 2>/dev/null || iptables -I FORWARD 1 -p tcp --dport 50000 -j DROP
+      iptables -C FORWARD -p tcp --sport 50000 -j DROP 2>/dev/null || iptables -I FORWARD 1 -p tcp --sport 50000 -j DROP
+    fi
+    EOF
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - item.meta.control_plane is defined
+  changed_when: true
+
+- name: Start simple_switch in generated NetCache switch pod
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    'IFACE_ARGS="{% for port_item in item.meta.ports | dictsort %} -i {{ port_item.0 }}@{{ port_item.1.ifname }}{% endfor %}";
+    nohup simple_switch_wrapped $IFACE_ARGS --device-id {{ item.meta.node_id | default(0) }} --thrift-port {{ item.meta.netcache.thrift_port | default(9090) }} /netcache/p4/netcache.json >/tmp/switch.log 2>&1 &'
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Wait for generated BMv2 thrift to come up
+  block:
+    - name: Probe generated BMv2 thrift listener
+      ansible.builtin.shell: >-
+        {{ generated_netcache_kubectl_command }}
+        exec -n {{ item.namespace }}
+        {{ item.pod }} -- sh -lc
+        "ss -lnt | grep -q ':{{ item.meta.netcache.thrift_port | default(9090) }} '"
+      register: generated_netcache_thrift_ready
+      loop: "{{ generated_netcache_switch_infos }}"
+      loop_control:
+        label: "{{ item.name }}"
+      retries: 20
+      delay: 1
+      until: generated_netcache_thrift_ready.rc == 0
+      changed_when: false
+  rescue:
+    - name: Collect generated BMv2 startup diagnostics
+      ansible.builtin.shell: >-
+        {{ generated_netcache_kubectl_command }}
+        exec -n {{ item.namespace }}
+        {{ item.pod }} -- sh -lc
+        "echo '=== paths ===';
+         ls -l /netcache/p4/netcache.json /tmp/switch.log 2>&1 || true;
+         echo '=== interfaces ===';
+         ip -o link show || true;
+         echo '=== commands ===';
+         command -v simple_switch_wrapped || true;
+         command -v simple_switch || true;
+         echo '=== listeners ===';
+         ss -lntp || true;
+         echo '=== processes ===';
+         ps aux | grep -E 'simple_switch|PID' | grep -v grep || true;
+         echo '=== switch.log ===';
+         tail -n 120 /tmp/switch.log 2>&1 || true"
+      register: generated_netcache_switch_diagnostics
+      loop: "{{ generated_netcache_switch_infos }}"
+      loop_control:
+        label: "{{ item.name }}"
+      failed_when: false
+      changed_when: false
+
+    - name: Show generated BMv2 startup diagnostics
+      ansible.builtin.debug:
+        var: generated_netcache_switch_diagnostics.results
+
+    - name: Fail because generated BMv2 thrift did not start
+      ansible.builtin.fail:
+        msg: "Generated BMv2 thrift did not start; see diagnostics above."
+
+- name: Load graph-node NetCache routing entries
+  ansible.builtin.shell: >-
+    cat {{ item.cli_source }} |
+    {{ generated_netcache_kubectl_command }}
+    exec -i -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "simple_switch_CLI_wrapped --thrift-port {{ item.meta.netcache.thrift_port | default(9090) }}"
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Run NetCache controller bootstrap in switch pod
+  ansible.builtin.shell: |
+    {{ generated_netcache_kubectl_command }} exec -i -n {{ item.namespace }} {{ item.pod }} -- sh <<'EOF'
+    set -eu
+    pkill -f '[p]ython3 /netcache/control_plane/controller.py --switch-name {{ item.name }}' || true
+    rm -f /work/netcache-controller.log
+    cd /netcache/control_plane
+    export PYTHONPATH=/netcache:/opt/p4-utils:/opt/p4/cli:/opt/p4:/opt/behavioral-model/tools:/usr/local/lib/python3.11/dist-packages:/usr/local/lib/python3.10/site-packages
+    nohup python3 /netcache/control_plane/controller.py \
+      --switch-name {{ item.name }} \
+      --topology-db /netcache/{{ netcache_topology_db_target_relpath }} \
+      --no-sniff \
+      --api-listen 0.0.0.0 --api-port 18080 \
+      >/work/netcache-controller.log 2>&1 </dev/null &
+    EOF
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Wait for NetCache control API in switch pods
+  block:
+    - name: Wait for NetCache control API in switch pod
+      ansible.builtin.shell: >-
+        {{ generated_netcache_kubectl_command }}
+        exec -n {{ item.namespace }}
+        {{ item.pod }} -- sh -lc
+        "ss -lnt | grep -q ':18080 '"
+      register: generated_netcache_control_api_ready
+      loop: "{{ generated_netcache_switch_infos }}"
+      loop_control:
+        label: "{{ item.name }}"
+      retries: 20
+      delay: 1
+      until: generated_netcache_control_api_ready.rc == 0
+      changed_when: false
+  rescue:
+    - name: Collect NetCache control API diagnostics
+      ansible.builtin.shell: >-
+        {{ generated_netcache_kubectl_command }}
+        exec -n {{ item.namespace }}
+        {{ item.pod }} -- sh -lc
+        "echo '=== processes ===';
+         ps aux | grep -E 'controller.py|PID' | grep -v grep || true;
+         echo '=== listeners ===';
+         ss -lntp || true;
+         echo '=== controller log ===';
+         test -f /work/netcache-controller.log && tail -n 200 /work/netcache-controller.log || true"
+      register: generated_netcache_control_api_diagnostics
+      loop: "{{ generated_netcache_switch_infos }}"
+      loop_control:
+        label: "{{ item.name }}"
+      changed_when: false
+      failed_when: false
+
+    - name: Show NetCache control API diagnostics
+      ansible.builtin.debug:
+        msg: "{{ item.item.name }}: {{ item.stdout_lines }}"
+      loop: "{{ generated_netcache_control_api_diagnostics.results | default([]) }}"
+      loop_control:
+        label: "{{ item.item.name }}"
+
+    - name: Fail because NetCache control API did not start
+      ansible.builtin.fail:
+        msg: "NetCache control API did not start; see diagnostics above."
+
+- name: Dump generated NetCache lookup tables
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "printf 'table_dump lookup_table\n' |
+     simple_switch_CLI_wrapped --thrift-port {{ item.meta.netcache.thrift_port | default(9090) }}"
+  register: generated_netcache_lookup_tables
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: false
+
+- name: Read backend log
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "test -f /work/netcache-server.log && tail -n 100 /work/netcache-server.log || test -f /tmp/netcache-backend.log && tail -n 100 /tmp/netcache-backend.log || true"
+  register: generated_netcache_backend_log
+  loop: "{{ generated_netcache_backend_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: false
+
+- name: Read controller log
+  ansible.builtin.shell: >-
+    {{ generated_netcache_kubectl_command }}
+    exec -n {{ item.namespace }}
+    {{ item.pod }} -- sh -lc
+    "test -f /work/netcache-controller.log && tail -n 100 /work/netcache-controller.log || test -f /tmp/netcache-controller.log && tail -n 100 /tmp/netcache-controller.log || true"
+  register: generated_netcache_controller_log
+  loop: "{{ generated_netcache_switch_infos }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: false
+
+- name: Show backend log
+  ansible.builtin.debug:
+    msg: "{{ item.item.name }}: {{ item.stdout_lines }}"
+  loop: "{{ generated_netcache_backend_log.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+
+- name: Show controller log
+  ansible.builtin.debug:
+    msg: "{{ item.item.name }}: {{ item.stdout_lines }}"
+  loop: "{{ generated_netcache_controller_log.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+
+- name: Fail if NetCache controller crashed
+  ansible.builtin.fail:
+    msg: "NetCache controller crashed; see controller log above."
+  when:
+    - generated_netcache_controller_log.results | default([]) | map(attribute='stdout') | select('search', 'Traceback|ModuleNotFoundError|Exception') | list | length > 0
+
+- name: Show generated NetCache lookup table summaries
+  ansible.builtin.debug:
+    msg: "{{ item.item.name }} lookup entries={{ item.stdout | regex_findall('set_lookup_metadata') | length }}"
+  loop: "{{ generated_netcache_lookup_tables.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.name }}"

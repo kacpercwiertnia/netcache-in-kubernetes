@@ -1,0 +1,55 @@
+---
+kinda_node_image: "kindest/node:v1.35.1@sha256:05d7bcdefbda08b4e038f644c4df690cdac3fba8b06f8289f30e10026720a1ab"
+kinda_kubectl_command: "microk8s kubectl"
+kinda_bootstrap_configmap_name: "kinda-bootstrap"
+kinda_manifest_dir: "/tmp/kinda-manifests"
+kinda_wait_timeout_seconds: 240
+kinda_stability_wait_seconds: 90
+kinda_control_plane_cpu_request: "500m"
+kinda_control_plane_memory_request: "768Mi"
+kinda_worker_cpu_request: "100m"
+kinda_worker_memory_request: "384Mi"
+kinda_worker_join_settle_seconds: 10
+kinda_node_ready_retries: 30
+kinda_node_ready_retry_delay_seconds: 5
+kinda_join_retries: 5
+kinda_join_retry_delay_seconds: 15
+kinda_join_command_timeout: "90s"
+
+kinda_access_switch_discovery_retries: 30
+kinda_access_switch_discovery_retry_delay_seconds: 5
+
+kinda_kathara_network_prefix: "{{ kathara_net_prefix | default('kathara') }}"
+kinda_access_interface_name: "access0"
+kinda_access_route_prefixes:
+  - "10.0.0.0/16"
+  - "10.200.0.0/16"
+  - "10.210.0.0/16"
+  - "10.255.0.0/16"
+netcache_metrics_mode: "{{ lookup('env', 'NETCACHE_METRICS_MODE') | default('cluster', true) }}"
+kinda_in_network_device_metrics_poll_seconds: 5
+kinda_in_network_device_metrics_hit_cpu_cost: "1.0"
+kinda_in_network_device_metrics_miss_cpu_cost: "8.0"
+kinda_in_network_device_metrics_cpu_budget_pps: "100000.0"
+kinda_netcache_switch_capacity_entries: 65536
+kinda_netcache_switch_capacity_slots: 524288
+kinda_netcache_controller_image: "python:3.12-alpine@sha256:4c47124a8391cb7a9f571164147d154777cf012a4ece5f86097130d7a4478111"
+kinda_netcache_controller_poll_seconds: 5
+kinda_netcache_controller_client_image: "docker.io/kacpercwiertnia/netcache-client:values-f89671e@sha256:cfb21ebd6ad39a50ecd3ee49aac87039484d2d545e0391f074e3ecbdf567a859"
+kinda_netcache_controller_client_image_pull_policy: "Always"
+kinda_netcache_controller_redis_image: "redis:7-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499"
+kinda_netcache_controller_redis_stable_ready_polls: 3
+kinda_netcache_controller_redis_max_restarts: 4
+kinda_netcache_controller_redis_max_unstable_polls: 6
+kinda_netcache_controller_redis_max_clients: 8
+kinda_netcache_controller_redis_max_fallback_attempts: 3
+kinda_netcache_controller_redis_keep_failed_pods: false
+kinda_netcache_controller_max_runtime_start_retries: 3
+kinda_netcache_scheduler_name: "netcache-scheduler"
+kinda_netcache_scheduler_image: "docker.io/kacpercwiertnia/netcache-scheduler:dev@sha256:7791eaed80370e2295cf1d542e5c1a8e98359c88e42c6f5b3479c7fa9226ab8b"
+kinda_netcache_scheduler_image_pull_policy: "Always"
+kinda_netcache_scheduler_capacity_weight: "35.0"
+kinda_netcache_scheduler_worker_weight: "10.0"
+kinda_netcache_scheduler_device_weight: "35.0"
+kinda_netcache_scheduler_hop_weight: "20.0"
+kinda_netcache_controller_placement_image: "registry.k8s.io/pause:3.10@sha256:ee6521f290b2168b6e0935a181d4cff9be1ac3f505666ef0e3c98fae8199917a"

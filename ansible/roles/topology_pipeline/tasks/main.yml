@@ -1,0 +1,214 @@
+---
+- name: Validate required user inputs
+  ansible.builtin.fail:
+    msg: "You must provide topology_local_lab_dir, for example: -e topology_local_lab_dir=/path/to/generated/lab"
+  when: topology_local_lab_dir | default('') | trim == ""
+
+- name: Set runtime defaults
+  ansible.builtin.set_fact:
+    topology_workspace_dir: "{{ topology_workspace_dir | default(remote_home ~ '/topology-workspace') }}"
+    topology_output_dir: "{{ topology_output_dir | default(remote_home ~ '/topology-workspace/outputs') }}"
+    topology_lab_name: "{{ topology_lab_name | default('GeneratedGraphLab') }}"
+
+    topology_kathara_lclean_timeout_seconds: "{{ topology_kathara_lclean_timeout_seconds | default(120) }}"
+    topology_orphan_namespace_wait_seconds: "{{ topology_orphan_namespace_wait_seconds | default(180) }}"
+    topology_kathara_lstart_retries: "{{ topology_kathara_lstart_retries | default(20) }}"
+    topology_kathara_lstart_retry_delay_seconds: "{{ topology_kathara_lstart_retry_delay_seconds | default(15) }}"
+    topology_lab_dir: "{{ (topology_output_dir | default(remote_home ~ '/topology-workspace/outputs')) ~ '/' ~ (topology_lab_name | default('GeneratedGraphLab')) }}"
+
+- name: Ensure topology workspace directory exists
+  become: false
+  ansible.builtin.file:
+    path: "{{ topology_workspace_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure topology output directory exists
+  become: false
+  ansible.builtin.file:
+    path: "{{ topology_output_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Check whether existing Kathara lab directory already exists
+  become: false
+  ansible.builtin.stat:
+    path: "{{ topology_lab_dir }}"
+  register: existing_topology_lab_dir
+
+- name: Stop previous Kathara lab before replacing it
+  become: false
+  ansible.builtin.command:
+    argv:
+      - timeout
+      - --kill-after=10s
+      - "{{ topology_kathara_lclean_timeout_seconds }}s"
+      - python3
+      - -m
+      - kathara
+      - lclean
+  args:
+    chdir: "{{ topology_lab_dir }}"
+  environment:
+    HOME: "{{ remote_home }}"
+    PATH: "{{ remote_home }}/.local/bin:{{ ansible_facts.env.PATH }}"
+    KUBECONFIG: "{{ remote_home }}/.kube/config"
+  when:
+    - existing_topology_lab_dir.stat.exists
+  register: topology_lclean_result
+  failed_when: false
+  changed_when: false
+
+- name: Report incomplete Kathara cleanup
+  ansible.builtin.debug:
+    msg: "Kathara lclean returned rc={{ topology_lclean_result.rc }}; continuing with namespace cleanup."
+  when:
+    - topology_lclean_result is not skipped
+    - topology_lclean_result.rc | default(0) != 0
+
+- name: Delete orphaned Kathara namespaces before starting a generated lab
+  become: false
+  ansible.builtin.shell: |
+    set -eu
+    namespaces="$(
+      microk8s kubectl get pods -A --no-headers 2>/dev/null |
+        awk '$1 != "kube-system" && $2 ~ /^kathara-/ {print $1}' |
+        sort -u
+    )"
+    if [ -z "$namespaces" ]; then
+      echo "No orphaned Kathara namespaces found"
+      exit 0
+    fi
+    echo "$namespaces" | xargs -r microk8s kubectl delete namespace --wait=false
+    deadline=$((SECONDS + {{ topology_orphan_namespace_wait_seconds }}))
+    while [ "$SECONDS" -lt "$deadline" ]; do
+      current="$(microk8s kubectl get namespace --no-headers 2>/dev/null || true)"
+      remaining=""
+      for ns in $namespaces; do
+        line="$(printf "%s\n" "$current" | awk -v ns="$ns" '$1 == ns {print $1 ":" $2; exit}')"
+        if [ -n "$line" ]; then
+          remaining="${remaining}${remaining:+ }${line}"
+        fi
+      done
+      if [ -z "$remaining" ]; then
+        echo "Deleted orphaned Kathara namespaces"
+        exit 0
+      fi
+      echo "Waiting for orphaned Kathara namespaces: $remaining"
+      sleep 5
+    done
+    echo "Timed out waiting for orphaned Kathara namespaces to disappear" >&2
+    exit 1
+  args:
+    executable: /bin/bash
+  environment:
+    HOME: "{{ remote_home }}"
+    PATH: "{{ remote_home }}/.local/bin:{{ ansible_facts.env.PATH }}"
+    KUBECONFIG: "{{ remote_home }}/.kube/config"
+  register: topology_orphan_namespace_cleanup
+  changed_when: "'No orphaned Kathara namespaces found' not in topology_orphan_namespace_cleanup.stdout"
+
+- name: Remove existing Kathara lab directory
+  become: false
+  ansible.builtin.file:
+    path: "{{ topology_lab_dir }}"
+    state: absent
+
+- name: Recreate destination lab directory
+  become: false
+  ansible.builtin.file:
+    path: "{{ topology_lab_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Create temporary local archive file for generated Kathara lab
+  become: false
+  delegate_to: localhost
+  ansible.builtin.tempfile:
+    state: file
+    suffix: "-{{ topology_lab_name }}.tar.gz"
+  register: topology_local_archive
+
+- name: Pack generated Kathara lab locally
+  become: false
+  delegate_to: localhost
+  ansible.builtin.command:
+    argv:
+      - tar
+      - -czf
+      - "{{ topology_local_archive.path }}"
+      - "."
+  args:
+    chdir: "{{ topology_local_lab_dir }}"
+  changed_when: true
+
+- name: Upload generated Kathara lab archive to control plane
+  become: false
+  ansible.builtin.copy:
+    src: "{{ topology_local_archive.path }}"
+    dest: "/tmp/{{ topology_lab_name }}.tar.gz"
+    mode: "0644"
+
+- name: Unpack generated Kathara lab archive on control plane
+  become: false
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ topology_lab_name }}.tar.gz"
+    dest: "{{ topology_lab_dir }}"
+    remote_src: true
+
+- name: Remove generated Kathara lab archive from control plane
+  become: false
+  ansible.builtin.file:
+    path: "/tmp/{{ topology_lab_name }}.tar.gz"
+    state: absent
+
+- name: Remove temporary local generated Kathara lab archive
+  become: false
+  delegate_to: localhost
+  ansible.builtin.file:
+    path: "{{ topology_local_archive.path }}"
+    state: absent
+
+- name: Verify uploaded lab.conf exists
+  become: false
+  ansible.builtin.stat:
+    path: "{{ topology_lab_dir }}/lab.conf"
+  register: uploaded_lab_conf
+
+- name: Fail if uploaded directory is not a valid Kathara lab
+  ansible.builtin.fail:
+    msg: "No lab.conf found in uploaded lab directory: {{ topology_lab_dir }}"
+  when: not uploaded_lab_conf.stat.exists
+
+- name: Start Kathara lab
+  become: false
+  ansible.builtin.command: python3 -m kathara lstart
+  args:
+    chdir: "{{ topology_lab_dir }}"
+  environment:
+    HOME: "{{ remote_home }}"
+    PATH: "{{ remote_home }}/.local/bin:{{ ansible_facts.env.PATH }}"
+    KUBECONFIG: "{{ remote_home }}/.kube/config"
+  register: kathara_start
+  until: kathara_start.rc == 0
+  retries: "{{ topology_kathara_lstart_retries | int }}"
+  delay: "{{ topology_kathara_lstart_retry_delay_seconds | int }}"
+  changed_when: true
+
+- name: Show Kathara lab info
+  become: false
+  ansible.builtin.command:
+    argv: [python3, -m, kathara, linfo]
+  args:
+    chdir: "{{ topology_lab_dir }}"
+  environment:
+    HOME: "{{ remote_home }}"
+    PATH: "{{ remote_home }}/.local/bin:{{ ansible_facts.env.PATH }}"
+    KUBECONFIG: "{{ remote_home }}/.kube/config"
+  register: kathara_linfo
+  changed_when: false
+
+- name: Print Kathara lab info
+  ansible.builtin.debug:
+    var: kathara_linfo.stdout_lines
+  when: kathara_linfo.stdout | default('') | trim != ''

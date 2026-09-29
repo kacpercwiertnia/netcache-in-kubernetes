@@ -1,0 +1,10 @@
+{
+  "EvalNet": {
+    "url": "https://github.com/spcl/EvalNet.git",
+    "commit": "40c2d02a4f5ea59476c0dcce7e748b901c534c6f"
+  },
+  "netcache": {
+    "url": "https://github.com/kacpercwiertnia/netcache.git",
+    "commit": "f89671eb24920340c1985fedc49fedf9580387fb"
+  }
+}

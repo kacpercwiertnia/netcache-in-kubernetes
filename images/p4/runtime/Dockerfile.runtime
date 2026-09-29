@@ -1,0 +1,88 @@
+FROM kacpercwiertnia/p4-builder:dev@sha256:2248ce043e6a107d3c056f46ea1bb0fdcc0159d35f3b525ea2d28bc8f6b57dea AS builder
+
+RUN mkdir -p /runtime-root/opt/p4/bin \
+             /runtime-root/opt/p4/lib \
+             /runtime-root/opt/p4/cli \
+             /runtime-root/usr/local/lib/python3.10/site-packages
+
+RUN cp -a /usr/local/bin/simple_switch /runtime-root/opt/p4/bin/ && \
+    cp -a /usr/local/bin/simple_switch_CLI /runtime-root/opt/p4/bin/
+
+RUN cp -a /usr/local/lib/libruntimestubs.so* /runtime-root/opt/p4/lib/ || true && \
+    cp -a /usr/local/lib/libsimpleswitch_thrift.so* /runtime-root/opt/p4/lib/ || true
+
+RUN mkdir -p /runtime-root/opt/behavioral-model && \
+    cp -a /opt/behavioral-model/tools /runtime-root/opt/behavioral-model/tools || true
+
+# Copy only non-system shared libraries needed by BMv2 binaries.
+RUN set -e; \
+    for bin in /usr/local/bin/simple_switch /usr/local/bin/simple_switch_CLI; do \
+      ldd "$bin" | awk '/=> \// {print $3} /^\// {print $1}'; \
+    done | sed 's/:$//' | grep '^/' | sort -u | \
+    grep -Ev '/(libc\.so\.6|libm\.so\.6|libpthread\.so\.0|libdl\.so\.2|librt\.so\.1|libresolv\.so\.2|ld-linux.*\.so.*)$' | \
+    xargs -I '{}' cp -v '{}' /runtime-root/opt/p4/lib/ || true
+
+# Python deps needed at runtime.
+RUN python3 -m pip install --no-cache-dir \
+      thrift \
+      ipaddr \
+      ipaddress \
+      networkx \
+      scapy
+
+# Fetch upstream p4-utils in the build stage. The final runtime stage installs
+# it with the same install.sh path used on AWS, against the runtime Python.
+ARG P4_UTILS_REF=83b118bbae530b31cc74e7fa32f9174f7c0a1184
+RUN git init /opt/p4-utils && cd /opt/p4-utils && \
+    git fetch --depth 1 https://github.com/nsg-ethz/p4-utils.git "${P4_UTILS_REF}" && \
+    git checkout --detach FETCH_HEAD
+
+# Copy the site-packages tree that actually contains BMv2 CLI Python modules.
+RUN mkdir -p /runtime-root/usr/local/lib/python3.10/site-packages && \
+    cp -a /usr/local/lib/python3.10/site-packages/. /runtime-root/usr/local/lib/python3.10/site-packages/
+
+# Copy BMv2 CLI Python modules into a dedicated runtime path.
+RUN mkdir -p /runtime-root/opt/p4/cli && \
+    cp /usr/local/lib/python3.10/site-packages/sswitch_CLI.py /runtime-root/opt/p4/cli/ && \
+    cp /usr/local/lib/python3.10/site-packages/runtime_CLI.py /runtime-root/opt/p4/cli/ && \
+    cp -a /usr/local/lib/python3.10/site-packages/sswitch_runtime /runtime-root/opt/p4/cli/ && \
+    cp -a /usr/local/lib/python3.10/site-packages/bm_runtime /runtime-root/opt/p4/cli/
+
+FROM docker.io/kathara/base:latest@sha256:8a2e70ac8f51bb283b8549fd686f65f9a1ef4487fe2c81849cb74d301e61970b
+
+USER root
+
+COPY --from=builder /runtime-root/opt/p4 /opt/p4
+COPY --from=builder /runtime-root/opt/behavioral-model /opt/behavioral-model
+COPY --from=builder /runtime-root/usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+COPY --from=builder /opt/p4-utils /opt/p4-utils
+
+COPY runtime/simple_switch_wrapped /usr/local/bin/simple_switch_wrapped
+COPY runtime/simple_switch_CLI_wrapped /usr/local/bin/simple_switch_CLI_wrapped
+
+RUN apt-get update && apt-get install -y \
+    python3 python3-pip \
+    iproute2 iputils-ping tcpdump net-tools procps \
+    ca-certificates bash coreutils grep sed gawk \
+    git help2man sudo \
+    && python3 -m pip install --no-cache-dir --break-system-packages \
+        thrift \
+        ipaddr \
+        ipaddress \
+        networkx \
+        scapy \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN cd /opt/p4-utils && \
+    python3 -m pip install --no-cache-dir --break-system-packages --no-deps --editable . && \
+    PYTHONPATH=/opt/p4-utils python3 -c "import p4utils; print(p4utils.__file__)"
+
+RUN chmod +x \
+    /usr/local/bin/simple_switch_wrapped \
+    /usr/local/bin/simple_switch_CLI_wrapped
+
+ENV PATH="/opt/p4/bin:${PATH}"
+ENV PYTHONPATH="/opt/p4-utils:/opt/p4/cli:/opt/p4:/opt/behavioral-model/tools:/usr/local/lib/python3.10/site-packages"
+
+WORKDIR /work
+CMD ["sh", "-lc", "while true; do sleep 3600; done"]

@@ -1,0 +1,375 @@
+- name: Apply NetCacheClientRequest CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      metadata:
+        name: netcacheclientrequests.cache.evalnet.local
+      spec:
+        group: cache.evalnet.local
+        scope: Namespaced
+        names:
+          plural: netcacheclientrequests
+          singular: netcacheclientrequest
+          kind: NetCacheClientRequest
+          shortNames:
+            - ncreq
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+            subresources:
+              status: {}
+            additionalPrinterColumns:
+              - name: Phase
+                type: string
+                jsonPath: .status.phase
+              - name: Mode
+                type: string
+                jsonPath: .status.cacheMode
+              - name: Switch
+                type: string
+                jsonPath: .status.switchName
+              - name: Worker
+                type: string
+                jsonPath: .status.attachedWorker
+              - name: Entries
+                type: integer
+                jsonPath: .status.allocatedEntries
+              - name: Pod
+                type: string
+                jsonPath: .status.podName
+              - name: Redis
+                type: string
+                jsonPath: .status.redisPodName
+            schema:
+              openAPIV3Schema:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    properties:
+                      operation:
+                        type: string
+                        default: read
+                      keys:
+                        type: string
+                      value:
+                        type: string
+                      cacheEntries:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - key
+                            - value
+                          properties:
+                            key:
+                              type: string
+                            value:
+                              type: string
+                      requestedEntries:
+                        type: integer
+                        minimum: 1
+                      prepopulateCache:
+                        type: boolean
+                        default: true
+                      cacheMissRatio:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                      iterations:
+                        type: integer
+                        minimum: 1
+                      sleepSeconds:
+                        type: number
+                        minimum: 0
+                      image:
+                        type: string
+                      imagePullPolicy:
+                        type: string
+                      podName:
+                        type: string
+                  status:
+                    type: object
+                    properties:
+                      phase:
+                        type: string
+                      reason:
+                        type: string
+                      cacheMode:
+                        type: string
+                      switchName:
+                        type: string
+                      attachedWorker:
+                        type: string
+                      selectedWorker:
+                        type: string
+                      selectedSwitchControlUrl:
+                        type: string
+                      podName:
+                        type: string
+                      placementPodName:
+                        type: string
+                      schedulerName:
+                        type: string
+                      redisPodName:
+                        type: string
+                      redisServiceName:
+                        type: string
+                      redisPodIp:
+                        type: string
+                      redisServiceIp:
+                        type: string
+                      redisRestartCount:
+                        type: integer
+                        minimum: 0
+                      redisReadyPolls:
+                        type: integer
+                        minimum: 0
+                      redisUnstablePolls:
+                        type: integer
+                        minimum: 0
+                      redisFallbackAttempt:
+                        type: integer
+                        minimum: 0
+                      redisLastReason:
+                        type: string
+                      redisFailedWorkers:
+                        type: string
+                      redisFailedInstances:
+                        type: string
+                      redisActiveClients:
+                        type: integer
+                        minimum: 0
+                      redisMaxClients:
+                        type: integer
+                        minimum: 1
+                      requestedEntries:
+                        type: integer
+                        minimum: 0
+                      allocatedEntries:
+                        type: integer
+                        minimum: 0
+                      allocatedSlots:
+                        type: integer
+                        minimum: 0
+                      selectedHopCount:
+                        type: integer
+                        minimum: 0
+                      selectedPathCost:
+                        type: integer
+                        minimum: 0
+                      fallbackToRedisRequests:
+                        type: integer
+                        minimum: 0
+                      accounted:
+                        type: boolean
+                      requestAccounted:
+                        type: boolean
+                      reservationId:
+                        type: string
+                      reservationReleased:
+                        type: boolean
+  changed_when: true
+
+- name: Wait for NetCacheClientRequest CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    wait --for=condition=Established
+    crd/netcacheclientrequests.cache.evalnet.local
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: false
+
+- name: Apply NetCache controller RBAC and deployment in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: netcache-controller
+        namespace: default
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: netcache-controller
+      rules:
+        - apiGroups:
+            - cache.evalnet.local
+          resources:
+            - innetworkdevices
+            - netcacheswitches
+            - netcacheclientrequests
+          verbs:
+            - get
+            - list
+            - watch
+            - patch
+            - update
+        - apiGroups:
+            - cache.evalnet.local
+          resources:
+            - innetworkdevices/status
+            - netcacheswitches/status
+            - netcacheclientrequests/status
+          verbs:
+            - get
+            - patch
+            - update
+        - apiGroups:
+            - ""
+          resources:
+            - pods
+            - services
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - delete
+        - apiGroups:
+            - ""
+          resources:
+            - nodes
+          verbs:
+            - get
+            - list
+            - watch
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: netcache-controller
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: netcache-controller
+      subjects:
+        - kind: ServiceAccount
+          name: netcache-controller
+          namespace: default
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: netcache-controller
+        namespace: default
+      data:
+        netcache-controller.py: |
+      {{ lookup('file', role_path ~ '/files/netcache-controller.py') | indent(4, true) }}
+        in-network-device-metrics-collector.py: |
+      {{ lookup('file', role_path ~ '/files/in-network-device-metrics-collector.py') | indent(4, true) }}
+      ---
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: netcache-controller
+        namespace: default
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: netcache-controller
+        template:
+          metadata:
+            labels:
+              app: netcache-controller
+          spec:
+            serviceAccountName: netcache-controller
+            nodeSelector:
+              kubernetes.io/hostname: kinda-control-plane
+            tolerations:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+                effect: NoSchedule
+              - key: node-role.kubernetes.io/master
+                operator: Exists
+                effect: NoSchedule
+            containers:
+              - name: controller
+                image: {{ kinda_netcache_controller_image }}
+                imagePullPolicy: IfNotPresent
+                command:
+                  - python
+                  - /opt/netcache-controller/netcache-controller.py
+                env:
+                  - name: WATCH_NAMESPACE
+                    value: default
+                  - name: POLL_SECONDS
+                    value: "{{ kinda_netcache_controller_poll_seconds }}"
+                  - name: KUBERNETES_SERVICE_HOST
+                    value: "{{ kinda_control_plane_pod_ip.stdout }}"
+                  - name: KUBERNETES_SERVICE_PORT
+                    value: "6443"
+                  - name: NETCACHE_CLIENT_IMAGE
+                    value: {{ kinda_netcache_controller_client_image }}
+                  - name: NETCACHE_CLIENT_IMAGE_PULL_POLICY
+                    value: {{ kinda_netcache_controller_client_image_pull_policy }}
+                  - name: REDIS_IMAGE
+                    value: {{ kinda_netcache_controller_redis_image }}
+                  - name: REDIS_STABLE_READY_POLLS
+                    value: "{{ kinda_netcache_controller_redis_stable_ready_polls }}"
+                  - name: REDIS_MAX_RESTARTS
+                    value: "{{ kinda_netcache_controller_redis_max_restarts }}"
+                  - name: REDIS_MAX_UNSTABLE_POLLS
+                    value: "{{ kinda_netcache_controller_redis_max_unstable_polls }}"
+                  - name: REDIS_MAX_CLIENTS
+                    value: "{{ kinda_netcache_controller_redis_max_clients }}"
+                  - name: REDIS_MAX_FALLBACK_ATTEMPTS
+                    value: "{{ kinda_netcache_controller_redis_max_fallback_attempts }}"
+                  - name: REDIS_KEEP_FAILED_PODS
+                    value: "{{ kinda_netcache_controller_redis_keep_failed_pods | bool | ternary('true', 'false') }}"
+                  - name: MAX_RUNTIME_START_RETRIES
+                    value: "{{ kinda_netcache_controller_max_runtime_start_retries }}"
+                  - name: NETCACHE_SCHEDULER_NAME
+                    value: "{{ kinda_netcache_scheduler_name }}"
+                  - name: NETCACHE_PLACEMENT_IMAGE
+                    value: "{{ kinda_netcache_controller_placement_image }}"
+                volumeMounts:
+                  - name: controller-script
+                    mountPath: /opt/netcache-controller
+                    readOnly: true
+            volumes:
+              - name: controller-script
+                configMap:
+                  name: netcache-controller
+  changed_when: true
+
+- name: Wait for NetCache controller deployment in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    -n default
+    rollout status deployment/netcache-controller
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: false
+
+- name: Show NetCache controller pod in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    -n default
+    get pods -l app=netcache-controller -o wide
+  register: kinda_netcache_controller_pods
+  changed_when: false
+  failed_when: false
+
+- name: Print NetCache controller pod in kinda cluster
+  ansible.builtin.debug:
+    var: kinda_netcache_controller_pods.stdout_lines
+  when: kinda_netcache_controller_pods.stdout | default('') | trim != ''

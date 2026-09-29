@@ -1,0 +1,112 @@
+---
+- name: Install Python tooling packages
+  ansible.builtin.apt:
+    name:
+      - git
+      - python3-pip
+      - python3-venv
+      - python3-kubernetes
+    state: present
+    update_cache: true
+
+- name: Install pip in user environment
+  become: false
+  ansible.builtin.pip:
+    name: pip==26.2.1
+    state: present
+    extra_args: --user
+    executable: pip3
+  environment:
+    HOME: "{{ remote_home }}"
+
+- name: Install pinned pyuv (Python 3.10 workaround)
+  become: false
+  ansible.builtin.command: >
+    python3 -m pip install --user git+https://github.com/saghul/pyuv@2a3d42d44c6315ebd73899a35118380d2d5979b5#egg=pyuv
+  environment:
+    HOME: "{{ remote_home }}"
+
+- name: Install Kathara in user environment
+  become: false
+  ansible.builtin.pip:
+    name: kathara==3.8.3
+    extra_args: --user
+    executable: pip3
+  environment:
+    HOME: "{{ remote_home }}"
+
+- name: Ensure ~/.bashrc exports local bin path
+  become: false
+  ansible.builtin.lineinfile:
+    path: "{{ remote_home }}/.bashrc"
+    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    create: true
+    mode: "0644"
+
+- name: Ensure ~/.bashrc exports KUBECONFIG
+  become: false
+  ansible.builtin.lineinfile:
+    path: "{{ remote_home }}/.bashrc"
+    line: 'export KUBECONFIG="$HOME/.kube/config"'
+    create: true
+    mode: "0644"
+
+- name: Ensure ~/.kube directory exists
+  become: false
+  ansible.builtin.file:
+    path: "{{ remote_home }}/.kube"
+    state: directory
+    mode: "0700"
+
+- name: Generate kubeconfig from MicroK8s
+  ansible.builtin.command: microk8s config
+  register: microk8s_config
+  changed_when: false
+
+- name: Write kubeconfig file
+  become: false
+  ansible.builtin.copy:
+    content: "{{ microk8s_config.stdout }}\n"
+    dest: "{{ remote_home }}/.kube/config"
+    mode: "0600"
+
+- name: Ensure ~/.config directory exists
+  become: false
+  ansible.builtin.file:
+    path: "{{ remote_home }}/.config"
+    state: directory
+    mode: "0700"
+
+- name: Render Kathara config
+  become: false
+  ansible.builtin.template:
+    src: kathara.conf.j2
+    dest: "{{ remote_home }}/.config/kathara.conf"
+    mode: "0644"
+
+- name: Verify kubectl access through generated kubeconfig
+  become: false
+  ansible.builtin.command: microk8s kubectl get nodes
+  environment:
+    HOME: "{{ remote_home }}"
+    KUBECONFIG: "{{ remote_home }}/.kube/config"
+    PATH: "{{ remote_home }}/.local/bin:{{ ansible_facts['env']['PATH'] }}"
+  changed_when: false
+
+- name: Verify Kathara Python module installation
+  become: false
+  ansible.builtin.command: python3 -m kathara --help
+  environment:
+    HOME: "{{ remote_home }}"
+    KUBECONFIG: "{{ remote_home }}/.kube/config"
+    PATH: "{{ remote_home }}/.local/bin:{{ ansible_facts['env']['PATH'] }}"
+  changed_when: false
+
+- name: Install Kathara CLI wrapper in /usr/local/bin
+  become: true
+  ansible.builtin.copy:
+    dest: /usr/local/bin/kathara
+    mode: "0755"
+    content: |
+      #!/usr/bin/env bash
+      exec python3 -m kathara "$@"

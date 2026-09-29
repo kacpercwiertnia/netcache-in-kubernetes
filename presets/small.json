@@ -1,0 +1,6349 @@
+{
+  "cases": [
+    {
+      "name": "fattree-small-one-zipf-a099-read-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        4
+      ],
+      "labName": "fattree-small-one-zipf-a099-read-seed1-0500"
+    },
+    {
+      "name": "fattree-small-one-zipf-a099-read-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        4
+      ],
+      "labName": "fattree-small-one-zipf-a099-read-miss20-seed1-0500"
+    },
+    {
+      "name": "fattree-small-one-dynamic-random-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        4
+      ],
+      "labName": "fattree-small-one-dynamic-random-miss20-seed1-0500"
+    },
+    {
+      "name": "fattree-small-one-zipf-a099-read-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        8
+      ],
+      "labName": "fattree-small-one-zipf-a099-read-seed2-0500"
+    },
+    {
+      "name": "fattree-small-one-zipf-a099-read-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        8
+      ],
+      "labName": "fattree-small-one-zipf-a099-read-miss20-seed2-0500"
+    },
+    {
+      "name": "fattree-small-one-dynamic-random-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        8
+      ],
+      "labName": "fattree-small-one-dynamic-random-miss20-seed2-0500"
+    },
+    {
+      "name": "fattree-small-one-zipf-a099-read-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        17
+      ],
+      "labName": "fattree-small-one-zipf-a099-read-seed3-0500"
+    },
+    {
+      "name": "fattree-small-one-zipf-a099-read-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        17
+      ],
+      "labName": "fattree-small-one-zipf-a099-read-miss20-seed3-0500"
+    },
+    {
+      "name": "fattree-small-one-dynamic-random-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        17
+      ],
+      "labName": "fattree-small-one-dynamic-random-miss20-seed3-0500"
+    },
+    {
+      "name": "fattree-small-p10-zipf-a099-read-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        4,
+        16
+      ],
+      "labName": "fattree-small-p10-zipf-a099-read-seed1-1000"
+    },
+    {
+      "name": "fattree-small-p10-zipf-a099-read-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        4,
+        16
+      ],
+      "labName": "fattree-small-p10-zipf-a099-read-miss20-seed1-1000"
+    },
+    {
+      "name": "fattree-small-p10-dynamic-random-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        4,
+        16
+      ],
+      "labName": "fattree-small-p10-dynamic-random-miss20-seed1-1000"
+    },
+    {
+      "name": "fattree-small-p10-zipf-a099-read-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        8,
+        11
+      ],
+      "labName": "fattree-small-p10-zipf-a099-read-seed2-1000"
+    },
+    {
+      "name": "fattree-small-p10-zipf-a099-read-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        8,
+        11
+      ],
+      "labName": "fattree-small-p10-zipf-a099-read-miss20-seed2-1000"
+    },
+    {
+      "name": "fattree-small-p10-dynamic-random-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        8,
+        11
+      ],
+      "labName": "fattree-small-p10-dynamic-random-miss20-seed2-1000"
+    },
+    {
+      "name": "fattree-small-p10-zipf-a099-read-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        13,
+        17
+      ],
+      "labName": "fattree-small-p10-zipf-a099-read-seed3-1000"
+    },
+    {
+      "name": "fattree-small-p10-zipf-a099-read-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        13,
+        17
+      ],
+      "labName": "fattree-small-p10-zipf-a099-read-miss20-seed3-1000"
+    },
+    {
+      "name": "fattree-small-p10-dynamic-random-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 10.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        13,
+        17
+      ],
+      "labName": "fattree-small-p10-dynamic-random-miss20-seed3-1000"
+    },
+    {
+      "name": "fattree-small-p33-zipf-a099-read-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        1,
+        2,
+        4,
+        11,
+        13,
+        16,
+        19
+      ],
+      "labName": "fattree-small-p33-zipf-a099-read-seed1-3500"
+    },
+    {
+      "name": "fattree-small-p33-zipf-a099-read-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        1,
+        2,
+        4,
+        11,
+        13,
+        16,
+        19
+      ],
+      "labName": "fattree-small-p33-zipf-a099-read-miss20-seed1-3500"
+    },
+    {
+      "name": "fattree-small-p33-dynamic-random-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        1,
+        2,
+        4,
+        11,
+        13,
+        16,
+        19
+      ],
+      "labName": "fattree-small-p33-dynamic-random-miss20-seed1-3500"
+    },
+    {
+      "name": "fattree-small-p33-zipf-a099-read-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        5,
+        7,
+        8,
+        11,
+        14,
+        17,
+        18
+      ],
+      "labName": "fattree-small-p33-zipf-a099-read-seed2-3500"
+    },
+    {
+      "name": "fattree-small-p33-zipf-a099-read-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        5,
+        7,
+        8,
+        11,
+        14,
+        17,
+        18
+      ],
+      "labName": "fattree-small-p33-zipf-a099-read-miss20-seed2-3500"
+    },
+    {
+      "name": "fattree-small-p33-dynamic-random-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        5,
+        7,
+        8,
+        11,
+        14,
+        17,
+        18
+      ],
+      "labName": "fattree-small-p33-dynamic-random-miss20-seed2-3500"
+    },
+    {
+      "name": "fattree-small-p33-zipf-a099-read-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        3,
+        5,
+        10,
+        13,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p33-zipf-a099-read-seed3-3500"
+    },
+    {
+      "name": "fattree-small-p33-zipf-a099-read-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        3,
+        5,
+        10,
+        13,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p33-zipf-a099-read-miss20-seed3-3500"
+    },
+    {
+      "name": "fattree-small-p33-dynamic-random-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 35.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        3,
+        5,
+        10,
+        13,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p33-dynamic-random-miss20-seed3-3500"
+    },
+    {
+      "name": "fattree-small-p100-zipf-a099-read-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-zipf-a099-read-seed1-10000"
+    },
+    {
+      "name": "fattree-small-p100-zipf-a099-read-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-zipf-a099-read-miss20-seed1-10000"
+    },
+    {
+      "name": "fattree-small-p100-dynamic-random-miss20-seed1",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-dynamic-random-miss20-seed1-10000"
+    },
+    {
+      "name": "fattree-small-p100-zipf-a099-read-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-zipf-a099-read-seed2-10000"
+    },
+    {
+      "name": "fattree-small-p100-zipf-a099-read-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-zipf-a099-read-miss20-seed2-10000"
+    },
+    {
+      "name": "fattree-small-p100-dynamic-random-miss20-seed2",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-dynamic-random-miss20-seed2-10000"
+    },
+    {
+      "name": "fattree-small-p100-zipf-a099-read-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-zipf-a099-read-seed3-10000"
+    },
+    {
+      "name": "fattree-small-p100-zipf-a099-read-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-zipf-a099-read-miss20-seed3-10000"
+    },
+    {
+      "name": "fattree-small-p100-dynamic-random-miss20-seed3",
+      "topology": "fattree",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "fattree",
+        "4"
+      ],
+      "topologyKind": "fattree",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 20,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "labName": "fattree-small-p100-dynamic-random-miss20-seed3-10000"
+    },
+    {
+      "name": "spine-leaf-small-one-zipf-a099-read-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "spine-leaf-small-one-zipf-a099-read-seed1-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-zipf-a099-read-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "spine-leaf-small-one-zipf-a099-read-miss20-seed1-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-dynamic-random-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "spine-leaf-small-one-dynamic-random-miss20-seed1-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-zipf-a099-read-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        8
+      ],
+      "labName": "spine-leaf-small-one-zipf-a099-read-seed2-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-zipf-a099-read-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        8
+      ],
+      "labName": "spine-leaf-small-one-zipf-a099-read-miss20-seed2-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-dynamic-random-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        8
+      ],
+      "labName": "spine-leaf-small-one-dynamic-random-miss20-seed2-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-zipf-a099-read-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "spine-leaf-small-one-zipf-a099-read-seed3-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-zipf-a099-read-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "spine-leaf-small-one-zipf-a099-read-miss20-seed3-0833"
+    },
+    {
+      "name": "spine-leaf-small-one-dynamic-random-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 8.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "spine-leaf-small-one-dynamic-random-miss20-seed3-0833"
+    },
+    {
+      "name": "spine-leaf-small-p10-zipf-a099-read-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        6
+      ],
+      "labName": "spine-leaf-small-p10-zipf-a099-read-seed1-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-zipf-a099-read-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        6
+      ],
+      "labName": "spine-leaf-small-p10-zipf-a099-read-miss20-seed1-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-dynamic-random-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        6
+      ],
+      "labName": "spine-leaf-small-p10-dynamic-random-miss20-seed1-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-zipf-a099-read-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        1,
+        8
+      ],
+      "labName": "spine-leaf-small-p10-zipf-a099-read-seed2-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-zipf-a099-read-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        1,
+        8
+      ],
+      "labName": "spine-leaf-small-p10-zipf-a099-read-miss20-seed2-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-dynamic-random-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        1,
+        8
+      ],
+      "labName": "spine-leaf-small-p10-dynamic-random-miss20-seed2-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-zipf-a099-read-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        5
+      ],
+      "labName": "spine-leaf-small-p10-zipf-a099-read-seed3-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-zipf-a099-read-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        5
+      ],
+      "labName": "spine-leaf-small-p10-zipf-a099-read-miss20-seed3-1667"
+    },
+    {
+      "name": "spine-leaf-small-p10-dynamic-random-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        5
+      ],
+      "labName": "spine-leaf-small-p10-dynamic-random-miss20-seed3-1667"
+    },
+    {
+      "name": "spine-leaf-small-p33-zipf-a099-read-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        6,
+        7,
+        8
+      ],
+      "labName": "spine-leaf-small-p33-zipf-a099-read-seed1-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-zipf-a099-read-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        6,
+        7,
+        8
+      ],
+      "labName": "spine-leaf-small-p33-zipf-a099-read-miss20-seed1-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-dynamic-random-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        6,
+        7,
+        8
+      ],
+      "labName": "spine-leaf-small-p33-dynamic-random-miss20-seed1-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-zipf-a099-read-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        1,
+        6,
+        7,
+        8
+      ],
+      "labName": "spine-leaf-small-p33-zipf-a099-read-seed2-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-zipf-a099-read-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        1,
+        6,
+        7,
+        8
+      ],
+      "labName": "spine-leaf-small-p33-zipf-a099-read-miss20-seed2-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-dynamic-random-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        1,
+        6,
+        7,
+        8
+      ],
+      "labName": "spine-leaf-small-p33-dynamic-random-miss20-seed2-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-zipf-a099-read-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        5,
+        7,
+        9
+      ],
+      "labName": "spine-leaf-small-p33-zipf-a099-read-seed3-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-zipf-a099-read-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        5,
+        7,
+        9
+      ],
+      "labName": "spine-leaf-small-p33-zipf-a099-read-miss20-seed3-3333"
+    },
+    {
+      "name": "spine-leaf-small-p33-dynamic-random-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        2,
+        5,
+        7,
+        9
+      ],
+      "labName": "spine-leaf-small-p33-dynamic-random-miss20-seed3-3333"
+    },
+    {
+      "name": "spine-leaf-small-p100-zipf-a099-read-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-zipf-a099-read-seed1-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-zipf-a099-read-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-zipf-a099-read-miss20-seed1-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-dynamic-random-miss20-seed1",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-dynamic-random-miss20-seed1-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-zipf-a099-read-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-zipf-a099-read-seed2-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-zipf-a099-read-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-zipf-a099-read-miss20-seed2-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-dynamic-random-miss20-seed2",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-dynamic-random-miss20-seed2-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-zipf-a099-read-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-zipf-a099-read-seed3-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-zipf-a099-read-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-zipf-a099-read-miss20-seed3-10000"
+    },
+    {
+      "name": "spine-leaf-small-p100-dynamic-random-miss20-seed3",
+      "topology": "spine-leaf",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "xgft",
+        "1",
+        "8",
+        "4"
+      ],
+      "topologyKind": "spine-leaf",
+      "accessPolicy": "auto",
+      "accessNodes": [],
+      "nodeCount": 12,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "labName": "spine-leaf-small-p100-dynamic-random-miss20-seed3-10000"
+    },
+    {
+      "name": "slimfly-small-one-zipf-a099-read-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        13
+      ],
+      "labName": "slimfly-small-one-zipf-a099-read-seed1-0556"
+    },
+    {
+      "name": "slimfly-small-one-zipf-a099-read-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        13
+      ],
+      "labName": "slimfly-small-one-zipf-a099-read-miss20-seed1-0556"
+    },
+    {
+      "name": "slimfly-small-one-dynamic-random-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        13
+      ],
+      "labName": "slimfly-small-one-dynamic-random-miss20-seed1-0556"
+    },
+    {
+      "name": "slimfly-small-one-zipf-a099-read-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12
+      ],
+      "labName": "slimfly-small-one-zipf-a099-read-seed2-0556"
+    },
+    {
+      "name": "slimfly-small-one-zipf-a099-read-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12
+      ],
+      "labName": "slimfly-small-one-zipf-a099-read-miss20-seed2-0556"
+    },
+    {
+      "name": "slimfly-small-one-dynamic-random-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12
+      ],
+      "labName": "slimfly-small-one-dynamic-random-miss20-seed2-0556"
+    },
+    {
+      "name": "slimfly-small-one-zipf-a099-read-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3
+      ],
+      "labName": "slimfly-small-one-zipf-a099-read-seed3-0556"
+    },
+    {
+      "name": "slimfly-small-one-zipf-a099-read-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3
+      ],
+      "labName": "slimfly-small-one-zipf-a099-read-miss20-seed3-0556"
+    },
+    {
+      "name": "slimfly-small-one-dynamic-random-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3
+      ],
+      "labName": "slimfly-small-one-dynamic-random-miss20-seed3-0556"
+    },
+    {
+      "name": "slimfly-small-p10-zipf-a099-read-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        11,
+        13
+      ],
+      "labName": "slimfly-small-p10-zipf-a099-read-seed1-1111"
+    },
+    {
+      "name": "slimfly-small-p10-zipf-a099-read-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        11,
+        13
+      ],
+      "labName": "slimfly-small-p10-zipf-a099-read-miss20-seed1-1111"
+    },
+    {
+      "name": "slimfly-small-p10-dynamic-random-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        11,
+        13
+      ],
+      "labName": "slimfly-small-p10-dynamic-random-miss20-seed1-1111"
+    },
+    {
+      "name": "slimfly-small-p10-zipf-a099-read-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12,
+        15
+      ],
+      "labName": "slimfly-small-p10-zipf-a099-read-seed2-1111"
+    },
+    {
+      "name": "slimfly-small-p10-zipf-a099-read-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12,
+        15
+      ],
+      "labName": "slimfly-small-p10-zipf-a099-read-miss20-seed2-1111"
+    },
+    {
+      "name": "slimfly-small-p10-dynamic-random-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12,
+        15
+      ],
+      "labName": "slimfly-small-p10-dynamic-random-miss20-seed2-1111"
+    },
+    {
+      "name": "slimfly-small-p10-zipf-a099-read-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        13
+      ],
+      "labName": "slimfly-small-p10-zipf-a099-read-seed3-1111"
+    },
+    {
+      "name": "slimfly-small-p10-zipf-a099-read-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        13
+      ],
+      "labName": "slimfly-small-p10-zipf-a099-read-miss20-seed3-1111"
+    },
+    {
+      "name": "slimfly-small-p10-dynamic-random-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        13
+      ],
+      "labName": "slimfly-small-p10-dynamic-random-miss20-seed3-1111"
+    },
+    {
+      "name": "slimfly-small-p33-zipf-a099-read-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        4,
+        7,
+        8,
+        11,
+        13,
+        15
+      ],
+      "labName": "slimfly-small-p33-zipf-a099-read-seed1-3333"
+    },
+    {
+      "name": "slimfly-small-p33-zipf-a099-read-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        4,
+        7,
+        8,
+        11,
+        13,
+        15
+      ],
+      "labName": "slimfly-small-p33-zipf-a099-read-miss20-seed1-3333"
+    },
+    {
+      "name": "slimfly-small-p33-dynamic-random-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        4,
+        7,
+        8,
+        11,
+        13,
+        15
+      ],
+      "labName": "slimfly-small-p33-dynamic-random-miss20-seed1-3333"
+    },
+    {
+      "name": "slimfly-small-p33-zipf-a099-read-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        6,
+        10,
+        12,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p33-zipf-a099-read-seed2-3333"
+    },
+    {
+      "name": "slimfly-small-p33-zipf-a099-read-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        6,
+        10,
+        12,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p33-zipf-a099-read-miss20-seed2-3333"
+    },
+    {
+      "name": "slimfly-small-p33-dynamic-random-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        6,
+        10,
+        12,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p33-dynamic-random-miss20-seed2-3333"
+    },
+    {
+      "name": "slimfly-small-p33-zipf-a099-read-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        8,
+        9,
+        10,
+        13,
+        15
+      ],
+      "labName": "slimfly-small-p33-zipf-a099-read-seed3-3333"
+    },
+    {
+      "name": "slimfly-small-p33-zipf-a099-read-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        8,
+        9,
+        10,
+        13,
+        15
+      ],
+      "labName": "slimfly-small-p33-zipf-a099-read-miss20-seed3-3333"
+    },
+    {
+      "name": "slimfly-small-p33-dynamic-random-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        8,
+        9,
+        10,
+        13,
+        15
+      ],
+      "labName": "slimfly-small-p33-dynamic-random-miss20-seed3-3333"
+    },
+    {
+      "name": "slimfly-small-p100-zipf-a099-read-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-zipf-a099-read-seed1-10000"
+    },
+    {
+      "name": "slimfly-small-p100-zipf-a099-read-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-zipf-a099-read-miss20-seed1-10000"
+    },
+    {
+      "name": "slimfly-small-p100-dynamic-random-miss20-seed1",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-dynamic-random-miss20-seed1-10000"
+    },
+    {
+      "name": "slimfly-small-p100-zipf-a099-read-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-zipf-a099-read-seed2-10000"
+    },
+    {
+      "name": "slimfly-small-p100-zipf-a099-read-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-zipf-a099-read-miss20-seed2-10000"
+    },
+    {
+      "name": "slimfly-small-p100-dynamic-random-miss20-seed2",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-dynamic-random-miss20-seed2-10000"
+    },
+    {
+      "name": "slimfly-small-p100-zipf-a099-read-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-zipf-a099-read-seed3-10000"
+    },
+    {
+      "name": "slimfly-small-p100-zipf-a099-read-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-zipf-a099-read-miss20-seed3-10000"
+    },
+    {
+      "name": "slimfly-small-p100-dynamic-random-miss20-seed3",
+      "topology": "slimfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "slimfly",
+        "3"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "slimfly-small-p100-dynamic-random-miss20-seed3-10000"
+    },
+    {
+      "name": "dragonfly-small-one-zipf-a099-read-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-one-zipf-a099-read-seed1-1667"
+    },
+    {
+      "name": "dragonfly-small-one-zipf-a099-read-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-one-zipf-a099-read-miss20-seed1-1667"
+    },
+    {
+      "name": "dragonfly-small-one-dynamic-random-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-one-dynamic-random-miss20-seed1-1667"
+    },
+    {
+      "name": "dragonfly-small-one-zipf-a099-read-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "dragonfly-small-one-zipf-a099-read-seed2-1667"
+    },
+    {
+      "name": "dragonfly-small-one-zipf-a099-read-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "dragonfly-small-one-zipf-a099-read-miss20-seed2-1667"
+    },
+    {
+      "name": "dragonfly-small-one-dynamic-random-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "dragonfly-small-one-dynamic-random-miss20-seed2-1667"
+    },
+    {
+      "name": "dragonfly-small-one-zipf-a099-read-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-one-zipf-a099-read-seed3-1667"
+    },
+    {
+      "name": "dragonfly-small-one-zipf-a099-read-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-one-zipf-a099-read-miss20-seed3-1667"
+    },
+    {
+      "name": "dragonfly-small-one-dynamic-random-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-one-dynamic-random-miss20-seed3-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-zipf-a099-read-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-p10-zipf-a099-read-seed1-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-zipf-a099-read-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-p10-zipf-a099-read-miss20-seed1-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-dynamic-random-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-p10-dynamic-random-miss20-seed1-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-zipf-a099-read-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "dragonfly-small-p10-zipf-a099-read-seed2-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-zipf-a099-read-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "dragonfly-small-p10-zipf-a099-read-miss20-seed2-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-dynamic-random-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        5
+      ],
+      "labName": "dragonfly-small-p10-dynamic-random-miss20-seed2-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-zipf-a099-read-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-p10-zipf-a099-read-seed3-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-zipf-a099-read-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-p10-zipf-a099-read-miss20-seed3-1667"
+    },
+    {
+      "name": "dragonfly-small-p10-dynamic-random-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 16.67,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        2
+      ],
+      "labName": "dragonfly-small-p10-dynamic-random-miss20-seed3-1667"
+    },
+    {
+      "name": "dragonfly-small-p33-zipf-a099-read-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        1,
+        2
+      ],
+      "labName": "dragonfly-small-p33-zipf-a099-read-seed1-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-zipf-a099-read-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        1,
+        2
+      ],
+      "labName": "dragonfly-small-p33-zipf-a099-read-miss20-seed1-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-dynamic-random-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        1,
+        2
+      ],
+      "labName": "dragonfly-small-p33-dynamic-random-miss20-seed1-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-zipf-a099-read-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        3,
+        5
+      ],
+      "labName": "dragonfly-small-p33-zipf-a099-read-seed2-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-zipf-a099-read-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        3,
+        5
+      ],
+      "labName": "dragonfly-small-p33-zipf-a099-read-miss20-seed2-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-dynamic-random-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        3,
+        5
+      ],
+      "labName": "dragonfly-small-p33-dynamic-random-miss20-seed2-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-zipf-a099-read-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        2
+      ],
+      "labName": "dragonfly-small-p33-zipf-a099-read-seed3-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-zipf-a099-read-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        2
+      ],
+      "labName": "dragonfly-small-p33-zipf-a099-read-miss20-seed3-3333"
+    },
+    {
+      "name": "dragonfly-small-p33-dynamic-random-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        2
+      ],
+      "labName": "dragonfly-small-p33-dynamic-random-miss20-seed3-3333"
+    },
+    {
+      "name": "dragonfly-small-p100-zipf-a099-read-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-zipf-a099-read-seed1-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-zipf-a099-read-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-zipf-a099-read-miss20-seed1-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-dynamic-random-miss20-seed1",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-dynamic-random-miss20-seed1-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-zipf-a099-read-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-zipf-a099-read-seed2-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-zipf-a099-read-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-zipf-a099-read-miss20-seed2-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-dynamic-random-miss20-seed2",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-dynamic-random-miss20-seed2-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-zipf-a099-read-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-zipf-a099-read-seed3-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-zipf-a099-read-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-zipf-a099-read-miss20-seed3-10000"
+    },
+    {
+      "name": "dragonfly-small-p100-dynamic-random-miss20-seed3",
+      "topology": "dragonfly",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "dragonfly",
+        "1"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodeCount": 6,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "labName": "dragonfly-small-p100-dynamic-random-miss20-seed3-10000"
+    },
+    {
+      "name": "jellyfish-small-one-zipf-a099-read-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        13
+      ],
+      "labName": "jellyfish-small-one-zipf-a099-read-seed1-0556"
+    },
+    {
+      "name": "jellyfish-small-one-zipf-a099-read-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        13
+      ],
+      "labName": "jellyfish-small-one-zipf-a099-read-miss20-seed1-0556"
+    },
+    {
+      "name": "jellyfish-small-one-dynamic-random-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        13
+      ],
+      "labName": "jellyfish-small-one-dynamic-random-miss20-seed1-0556"
+    },
+    {
+      "name": "jellyfish-small-one-zipf-a099-read-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12
+      ],
+      "labName": "jellyfish-small-one-zipf-a099-read-seed2-0556"
+    },
+    {
+      "name": "jellyfish-small-one-zipf-a099-read-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12
+      ],
+      "labName": "jellyfish-small-one-zipf-a099-read-miss20-seed2-0556"
+    },
+    {
+      "name": "jellyfish-small-one-dynamic-random-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12
+      ],
+      "labName": "jellyfish-small-one-dynamic-random-miss20-seed2-0556"
+    },
+    {
+      "name": "jellyfish-small-one-zipf-a099-read-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3
+      ],
+      "labName": "jellyfish-small-one-zipf-a099-read-seed3-0556"
+    },
+    {
+      "name": "jellyfish-small-one-zipf-a099-read-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3
+      ],
+      "labName": "jellyfish-small-one-zipf-a099-read-miss20-seed3-0556"
+    },
+    {
+      "name": "jellyfish-small-one-dynamic-random-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "one",
+      "requestedPercent": "one",
+      "actualPercent": 5.56,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3
+      ],
+      "labName": "jellyfish-small-one-dynamic-random-miss20-seed3-0556"
+    },
+    {
+      "name": "jellyfish-small-p10-zipf-a099-read-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        11,
+        13
+      ],
+      "labName": "jellyfish-small-p10-zipf-a099-read-seed1-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-zipf-a099-read-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        11,
+        13
+      ],
+      "labName": "jellyfish-small-p10-zipf-a099-read-miss20-seed1-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-dynamic-random-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        11,
+        13
+      ],
+      "labName": "jellyfish-small-p10-dynamic-random-miss20-seed1-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-zipf-a099-read-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12,
+        15
+      ],
+      "labName": "jellyfish-small-p10-zipf-a099-read-seed2-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-zipf-a099-read-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12,
+        15
+      ],
+      "labName": "jellyfish-small-p10-zipf-a099-read-miss20-seed2-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-dynamic-random-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        12,
+        15
+      ],
+      "labName": "jellyfish-small-p10-dynamic-random-miss20-seed2-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-zipf-a099-read-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        13
+      ],
+      "labName": "jellyfish-small-p10-zipf-a099-read-seed3-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-zipf-a099-read-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        13
+      ],
+      "labName": "jellyfish-small-p10-zipf-a099-read-miss20-seed3-1111"
+    },
+    {
+      "name": "jellyfish-small-p10-dynamic-random-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p10",
+      "requestedPercent": "p10",
+      "actualPercent": 11.11,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        13
+      ],
+      "labName": "jellyfish-small-p10-dynamic-random-miss20-seed3-1111"
+    },
+    {
+      "name": "jellyfish-small-p33-zipf-a099-read-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        4,
+        7,
+        8,
+        11,
+        13,
+        15
+      ],
+      "labName": "jellyfish-small-p33-zipf-a099-read-seed1-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-zipf-a099-read-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        4,
+        7,
+        8,
+        11,
+        13,
+        15
+      ],
+      "labName": "jellyfish-small-p33-zipf-a099-read-miss20-seed1-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-dynamic-random-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        4,
+        7,
+        8,
+        11,
+        13,
+        15
+      ],
+      "labName": "jellyfish-small-p33-dynamic-random-miss20-seed1-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-zipf-a099-read-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        6,
+        10,
+        12,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p33-zipf-a099-read-seed2-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-zipf-a099-read-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        6,
+        10,
+        12,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p33-zipf-a099-read-miss20-seed2-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-dynamic-random-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        6,
+        10,
+        12,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p33-dynamic-random-miss20-seed2-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-zipf-a099-read-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        8,
+        9,
+        10,
+        13,
+        15
+      ],
+      "labName": "jellyfish-small-p33-zipf-a099-read-seed3-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-zipf-a099-read-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        8,
+        9,
+        10,
+        13,
+        15
+      ],
+      "labName": "jellyfish-small-p33-zipf-a099-read-miss20-seed3-3333"
+    },
+    {
+      "name": "jellyfish-small-p33-dynamic-random-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p33",
+      "requestedPercent": "p33",
+      "actualPercent": 33.33,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        3,
+        8,
+        9,
+        10,
+        13,
+        15
+      ],
+      "labName": "jellyfish-small-p33-dynamic-random-miss20-seed3-3333"
+    },
+    {
+      "name": "jellyfish-small-p100-zipf-a099-read-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-zipf-a099-read-seed1-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-zipf-a099-read-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-zipf-a099-read-miss20-seed1-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-dynamic-random-miss20-seed1",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 1,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-dynamic-random-miss20-seed1-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-zipf-a099-read-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-zipf-a099-read-seed2-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-zipf-a099-read-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-zipf-a099-read-miss20-seed2-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-dynamic-random-miss20-seed2",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 2,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-dynamic-random-miss20-seed2-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-zipf-a099-read-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-zipf-a099-read-seed3-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-zipf-a099-read-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "zipf-a099-read-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-zipf-a099-read-miss20-seed3-10000"
+    },
+    {
+      "name": "jellyfish-small-p100-dynamic-random-miss20-seed3",
+      "topology": "jellyfish",
+      "size": "small",
+      "coverage": "p100",
+      "requestedPercent": "p100",
+      "actualPercent": 100.0,
+      "randomSeed": 3,
+      "placement": "random",
+      "backendMode": "selected-switch-local",
+      "workload": "dynamic-random-miss20",
+      "requestCount": 24,
+      "topologyArgs": [
+        "jellyfish",
+        "4",
+        "18"
+      ],
+      "topologyKind": "generic",
+      "accessPolicy": "explicit",
+      "accessNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nodeCount": 18,
+      "netcacheNodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "labName": "jellyfish-small-p100-dynamic-random-miss20-seed3-10000"
+    }
+  ]
+}

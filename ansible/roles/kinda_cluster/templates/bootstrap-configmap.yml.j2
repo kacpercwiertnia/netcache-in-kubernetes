@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ kinda_bootstrap_configmap_name }}
+  namespace: {{ kinda_namespace }}
+data:
+  node-cgroups.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # The host cgroup mount exposes the outer pod's full path. Keep all inner
+    # pod cgroups inside that container and use literal paths in both runtimes.
+    uid="${KINDA_NODE_UID:?missing outer pod UID}"
+    [[ "$uid" =~ ^[0-9a-f-]+$ ]] || exit 1
+    init_group=$(awk -F: '$1 == "0" {print $3}' /proc/1/cgroup)
+    [[ "$init_group" == */init.scope ]] || { echo "Unexpected PID 1 cgroup: $init_group" >&2; exit 1; }
+    parent="${init_group%/init.scope}"
+    [[ "$parent" == */pod"$uid"/* ]] || { echo "PID 1 is outside this outer pod: $parent" >&2; exit 1; }
+    root="$parent/kinda-pods"
+    test -f "/sys/fs/cgroup$parent/cgroup.controllers"
+    # PID 1 lives in init.scope, leaving this parent free to delegate controllers.
+    for controller in $(cat "/sys/fs/cgroup$parent/cgroup.controllers"); do
+      printf '+%s\n' "$controller" >"/sys/fs/cgroup$parent/cgroup.subtree_control"
+    done
+    mkdir -p "/sys/fs/cgroup$root" /etc/default
+    test -f "/sys/fs/cgroup$root/cgroup.controllers"
+    for controller in cpu cpuset memory hugetlb pids; do
+      if grep -qw "$controller" /sys/fs/cgroup/cgroup.controllers; then
+        grep -qw "$controller" "/sys/fs/cgroup$root/cgroup.controllers" || {
+          echo "Missing $controller controller in $root" >&2; exit 1;
+        }
+      fi
+    done
+    systemctl stop kubelet
+    grep -Eq '^[[:space:]]*SystemdCgroup[[:space:]]*=' /etc/containerd/config.toml
+    sed -i -E 's/^([[:space:]]*SystemdCgroup[[:space:]]*=[[:space:]]*)true/\1false/' /etc/containerd/config.toml
+    systemctl restart containerd
+    printf "KUBELET_EXTRA_ARGS=--fail-swap-on=false --cgroup-driver=cgroupfs --cgroup-root=%s\n" "$root" \
+      >/etc/default/kubelet
+    echo "Inner pod cgroups: $root (kubelet/containerd: cgroupfs)"
+  control-plane.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+    exec >>/var/log/kinda-control-plane-bootstrap.log 2>&1
+
+    (
+      flock -n 9 || exit 0
+      sleep 10
+
+      if [ -f /etc/kubernetes/admin.conf ]; then
+        exit 0
+      fi
+
+      mkdir -p /etc/cni/net.d
+      printf "%s\n" \
+        "{" \
+        "  \"cniVersion\": \"1.0.0\"," \
+        "  \"name\": \"kinda-local\"," \
+        "  \"plugins\": [" \
+        "    {" \
+        "      \"type\": \"ptp\"," \
+        "      \"ipMasq\": true," \
+        "      \"ipam\": {" \
+        "        \"type\": \"host-local\"," \
+        "        \"subnet\": \"172.30.0.0/24\"," \
+        "        \"routes\": [{ \"dst\": \"0.0.0.0/0\" }]" \
+        "      }" \
+        "    }," \
+        "    {" \
+        "      \"type\": \"portmap\"," \
+        "      \"capabilities\": { \"portMappings\": true }" \
+        "    }" \
+        "  ]" \
+        "}" \
+        >/etc/cni/net.d/10-kinda-local.conflist
+
+      sysctl -w net.ipv4.ip_forward=1 || true
+      bash /etc/kinda/bootstrap/node-cgroups.sh
+
+      kubeadm init \
+        --control-plane-endpoint=kinda-control-plane:6443 \
+        --pod-network-cidr=172.30.0.0/16 \
+        --service-cidr=172.31.0.0/16 \
+        --node-name="$(hostname)" \
+        --skip-phases=addon/kube-proxy,addon/coredns \
+        --ignore-preflight-errors=all
+
+      mkdir -p /root/.kube
+      cp /etc/kubernetes/admin.conf /root/.kube/config
+    ) 9>/var/run/kinda-control-plane-bootstrap.lock

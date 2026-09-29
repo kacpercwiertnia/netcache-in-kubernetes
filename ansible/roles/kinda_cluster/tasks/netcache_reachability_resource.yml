@@ -1,0 +1,22 @@
+---
+- name: Apply NetCacheReachability resource for {{ netcache_reachability_worker.workerName }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: cache.evalnet.local/v1alpha1
+      kind: NetCacheReachability
+      metadata:
+        name: "{{ netcache_reachability_worker.workerName }}"
+        labels:
+          topology.local/attached-worker: "{{ netcache_reachability_worker.workerName }}"
+          topology.local/access-switch: "{{ netcache_reachability_worker.attachedSwitch }}"
+      spec:
+        workerName: "{{ netcache_reachability_worker.workerName }}"
+        attachedSwitch: "{{ netcache_reachability_worker.attachedSwitch }}"
+        attachedNodeId: {{ netcache_reachability_worker.attachedNodeId | int }}
+        candidates: {{ netcache_reachability_worker.candidates | to_json }}
+  changed_when: true

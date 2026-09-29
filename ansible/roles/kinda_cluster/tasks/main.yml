@@ -1,0 +1,830 @@
+---
+- name: Build generated lab paths
+  ansible.builtin.set_fact:
+    kinda_topology_meta_path: "{{ generated_lab_remote_base_dir | default(remote_home ~ '/topology-workspace/outputs') }}/{{ topology_lab_name }}/topology.meta.json"
+
+- name: Ensure topology metadata exists
+  ansible.builtin.stat:
+    path: "{{ kinda_topology_meta_path }}"
+  register: kinda_topology_meta_stat
+
+- name: Fail when topology metadata is missing
+  ansible.builtin.assert:
+    that:
+      - kinda_topology_meta_stat.stat.exists
+    fail_msg: "Missing topology metadata: {{ kinda_topology_meta_path }}"
+
+- name: Load topology metadata
+  ansible.builtin.slurp:
+    src: "{{ kinda_topology_meta_path }}"
+  register: kinda_topology_meta_raw
+
+- name: Parse topology metadata
+  ansible.builtin.set_fact:
+    kinda_topology_meta: "{{ kinda_topology_meta_raw.content | b64decode | from_json }}"
+
+- name: Validate kinda topology metadata
+  ansible.builtin.assert:
+    that:
+      - kinda_topology_meta.access_switches is defined
+      - kinda_topology_meta.access_switches | length > 0
+      - kinda_topology_meta.kinda is defined
+      - kinda_topology_meta.kinda.workers is defined
+      - kinda_topology_meta.kinda.workers | length > 0
+      - kinda_topology_meta.netcache.switchResources | length > 0
+      - kinda_topology_meta.netcache.reachability.workers | length > 0
+    fail_msg: "topology.meta.json does not contain access_switches/kinda.workers"
+
+- name: Select kinda worker set
+  ansible.builtin.set_fact:
+    kinda_workers: "{{ kinda_topology_meta.kinda.workers }}"
+
+- name: Resolve expected Kathara switch names
+  ansible.builtin.set_fact:
+    kinda_expected_switch_names: "{{ kinda_topology_meta.switches.keys() | list | sort }}"
+
+- name: Discover Kathara namespace
+  ansible.builtin.shell: |
+    set -eu
+    {{ kinda_kubectl_command }} get pods -A --no-headers \
+      -o custom-columns=NS:.metadata.namespace,NAME:.metadata.name |
+    python3 -c '
+    import re
+    import sys
+    expected = set({{ kinda_expected_switch_names | to_json }})
+    found = {}
+    for line in sys.stdin:
+        parts = line.split()
+        if len(parts) < 2:
+            continue
+        ns, name = parts[0], parts[1]
+        match = re.match(r"^kathara-(s[0-9]+)-", name)
+        if match and match.group(1) in expected:
+            found.setdefault(ns, set()).add(match.group(1))
+    complete = [ns for ns, names in found.items() if expected.issubset(names)]
+    if complete:
+        print(sorted(complete)[-1])
+    elif found:
+        ns, names = max(found.items(), key=lambda item: len(item[1]))
+        print(ns)
+    '
+  register: kinda_namespace_cmd
+  changed_when: false
+
+- name: Fail if Kathara namespace was not discovered
+  ansible.builtin.assert:
+    that:
+      - kinda_namespace_cmd.stdout | trim | length > 0
+    fail_msg: "Could not discover Kathara namespace for expected switches {{ kinda_expected_switch_names | join(',') }}"
+
+- name: Set Kathara namespace fact
+  ansible.builtin.set_fact:
+    kinda_namespace: "{{ kinda_namespace_cmd.stdout | trim }}"
+
+- name: Discover outer microk8s control-plane node for kinda control-plane
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} get nodes
+    -l node-role.kubernetes.io/control-plane
+    -o jsonpath={.items[0].metadata.name}
+  register: kinda_outer_control_plane_node_cmd
+  changed_when: false
+
+- name: Fail if outer microk8s control-plane node was not discovered
+  ansible.builtin.assert:
+    that:
+      - kinda_outer_control_plane_node_cmd.stdout | trim | length > 0
+    fail_msg: "Could not discover outer microk8s control-plane node"
+
+- name: Set outer microk8s control-plane node fact
+  ansible.builtin.set_fact:
+    kinda_outer_control_plane_node: "{{ kinda_outer_control_plane_node_cmd.stdout | trim }}"
+
+- name: Discover outer microk8s node for each attached Kathara access switch
+  ansible.builtin.shell: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    get pods --no-headers
+    -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+    | awk '$1 ~ /^kathara-{{ worker.attached_switch }}-/ {print $2; exit}'
+  register: kinda_worker_outer_node_cmd
+  changed_when: false
+  until: kinda_worker_outer_node_cmd.stdout | trim | length > 0
+  retries: "{{ kinda_access_switch_discovery_retries | int }}"
+  delay: "{{ kinda_access_switch_discovery_retry_delay_seconds | int }}"
+  loop: "{{ kinda_workers }}"
+  loop_control:
+    loop_var: worker
+    label: "{{ worker.name }} -> {{ worker.attached_switch }}"
+
+- name: Build kinda worker outer node placement map
+  ansible.builtin.set_fact:
+    kinda_worker_outer_node_map: >-
+      {{
+        (kinda_worker_outer_node_map | default({}))
+        | combine({item.worker.name: (item.stdout | trim)})
+      }}
+  loop: "{{ kinda_worker_outer_node_cmd.results | default([]) }}"
+  loop_control:
+    label: "{{ item.worker.name }}={{ item.stdout | trim }}"
+
+- name: Fail if any access-switch placement was not discovered
+  ansible.builtin.assert:
+    that:
+      - (kinda_worker_outer_node_map | default({})).get(item.name, '') | length > 0
+    fail_msg: "Could not discover outer microk8s node for {{ item.name }} attached to {{ item.attached_switch }}"
+  loop: "{{ kinda_workers }}"
+  loop_control:
+    label: "{{ item.name }} -> {{ item.attached_switch }}"
+
+- name: Delete previous kinda pods in Kathara namespace
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    delete pod -l app.kubernetes.io/part-of=kinda
+    --ignore-not-found=true --wait=true --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: true
+  failed_when: false
+
+- name: Delete previous kinda service and ConfigMaps
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    delete service/kinda-control-plane
+    configmap/{{ kinda_bootstrap_configmap_name }}
+    --ignore-not-found=true
+  changed_when: true
+  failed_when: false
+
+- name: Ensure manifest directory exists
+  ansible.builtin.file:
+    path: "{{ kinda_manifest_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Render kinda bootstrap ConfigMap
+  ansible.builtin.template:
+    src: bootstrap-configmap.yml.j2
+    dest: "{{ kinda_manifest_dir }}/bootstrap-configmap.yml"
+    mode: "0644"
+
+- name: Render kinda control-plane service
+  ansible.builtin.template:
+    src: control-plane-service.yml.j2
+    dest: "{{ kinda_manifest_dir }}/control-plane-service.yml"
+    mode: "0644"
+
+- name: Render kinda control-plane pod
+  ansible.builtin.template:
+    src: control-plane-pod.yml.j2
+    dest: "{{ kinda_manifest_dir }}/control-plane-pod.yml"
+    mode: "0644"
+
+- name: Render kinda worker pods
+  ansible.builtin.template:
+    src: worker-pod.yml.j2
+    dest: "{{ kinda_manifest_dir }}/{{ worker.name }}.yml"
+    mode: "0644"
+  loop: "{{ kinda_workers }}"
+  loop_control:
+    loop_var: worker
+    label: "{{ worker.name }}"
+
+- name: Apply kinda bootstrap and control-plane manifests
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} apply -f {{ item }}
+  loop:
+    - "{{ kinda_manifest_dir }}/bootstrap-configmap.yml"
+    - "{{ kinda_manifest_dir }}/control-plane-service.yml"
+    - "{{ kinda_manifest_dir }}/control-plane-pod.yml"
+  changed_when: true
+
+- name: Wait for kinda control-plane pod
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }} wait
+    --for=condition=Ready pod/kinda-control-plane
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: false
+
+- name: Bootstrap kinda control-plane with kubeadm
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane -- /bin/bash /etc/kinda/bootstrap/control-plane.sh
+  register: kinda_control_plane_bootstrap
+  changed_when: true
+  ignore_errors: true
+
+- name: Show kinda control-plane bootstrap log when bootstrap fails
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane -- tail -n 220 /var/log/kinda-control-plane-bootstrap.log
+  register: kinda_control_plane_bootstrap_log
+  changed_when: false
+  failed_when: false
+  when: kinda_control_plane_bootstrap is failed
+
+- name: Print kinda control-plane bootstrap log when bootstrap fails
+  ansible.builtin.debug:
+    var: kinda_control_plane_bootstrap_log.stdout_lines
+  when:
+    - kinda_control_plane_bootstrap is failed
+    - kinda_control_plane_bootstrap_log.stdout | default('') | trim != ''
+
+- name: Collect kinda control-plane system diagnostics when bootstrap fails
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane -- /bin/bash -lc
+    'set +e;
+     echo "### ps";
+     ps -ef;
+     echo "### systemctl";
+     systemctl --no-pager status kubelet containerd || true;
+     echo "### kubelet journal";
+     journalctl --no-pager -u kubelet -n 160 || true;
+     echo "### containerd journal";
+     journalctl --no-pager -u containerd -n 120 || true;
+     echo "### cgroup";
+     mount | grep cgroup || true;
+     findmnt /sys/fs/cgroup || true;
+     ls -la /sys/fs/cgroup | head -80 || true'
+  register: kinda_control_plane_system_diagnostics
+  changed_when: false
+  failed_when: false
+  when: kinda_control_plane_bootstrap is failed
+
+- name: Print kinda control-plane system diagnostics when bootstrap fails
+  ansible.builtin.debug:
+    var: kinda_control_plane_system_diagnostics.stdout_lines
+  when:
+    - kinda_control_plane_bootstrap is failed
+    - kinda_control_plane_system_diagnostics.stdout | default('') | trim != ''
+
+- name: Fail if kinda control-plane bootstrap command failed
+  ansible.builtin.assert:
+    that:
+      - kinda_control_plane_bootstrap is succeeded
+    fail_msg: "kinda control-plane bootstrap failed; see kubelet/containerd diagnostics above."
+
+- name: Wait until kinda admin kubeconfig exists
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane -- test -f /etc/kubernetes/admin.conf
+  register: kinda_admin_conf
+  retries: 30
+  delay: 5
+  until: kinda_admin_conf.rc == 0
+  changed_when: false
+
+- name: Wait until kinda API server is healthy
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf get --raw=/readyz
+  register: kinda_api_ready
+  retries: 60
+  delay: 5
+  until: kinda_api_ready.rc == 0 and 'ok' in (kinda_api_ready.stdout | lower)
+  changed_when: false
+  ignore_errors: true
+
+- name: Show kinda control-plane bootstrap log if API is not healthy
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane -- tail -n 160 /var/log/kinda-control-plane-bootstrap.log
+  register: kinda_bootstrap_log
+  changed_when: false
+  failed_when: false
+  when: kinda_api_ready is failed
+
+- name: Print kinda control-plane bootstrap log if API is not healthy
+  ansible.builtin.debug:
+    var: kinda_bootstrap_log.stdout_lines
+  when: kinda_api_ready is failed
+
+- name: Fail if kinda API server is not healthy
+  ansible.builtin.assert:
+    that:
+      - kinda_api_ready is succeeded
+      - kinda_api_ready.rc == 0
+      - "'ok' in (kinda_api_ready.stdout | lower)"
+    fail_msg: "kinda API server did not become healthy; see bootstrap log above."
+
+- name: Apply kinda worker pod manifests
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} apply -f {{ kinda_manifest_dir }}/{{ item.name }}.yml
+  loop: "{{ kinda_workers }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+
+- name: Wait for kinda worker pods
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }} wait
+    --for=condition=Ready pod/{{ item.name }}
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  loop: "{{ kinda_workers }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: false
+
+- name: Create kubeadm join command
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubeadm token create --print-join-command
+  register: kinda_join_command
+  changed_when: false
+
+- name: Join kinda workers to control-plane one at a time
+  ansible.builtin.include_tasks: join_worker.yml
+  loop: "{{ kinda_workers }}"
+  loop_control:
+    loop_var: worker
+    label: "{{ worker.name }}"
+
+- name: Wait for kinda API after worker joins
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf get --raw=/readyz
+  register: kinda_api_ready_after_join
+  retries: 60
+  delay: 5
+  until: kinda_api_ready_after_join.rc == 0 and 'ok' in (kinda_api_ready_after_join.stdout | lower)
+  changed_when: false
+  ignore_errors: true
+
+- name: Fail if kinda API is unhealthy after worker joins
+  ansible.builtin.assert:
+    that:
+      - kinda_api_ready_after_join is succeeded
+      - kinda_api_ready_after_join.rc == 0
+      - "'ok' in (kinda_api_ready_after_join.stdout | lower)"
+    fail_msg: "kinda API server became unhealthy after worker joins."
+
+- name: Wait until all kinda inner nodes are Ready
+  ansible.builtin.shell: >-
+    set -o pipefail &&
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }} exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf get nodes --no-headers
+    | awk '{ if ($2 != "Ready") { print; bad=1 } } END { exit bad }'
+  args:
+    executable: /bin/bash
+  register: kinda_all_nodes_ready
+  retries: 60
+  delay: 5
+  until: kinda_all_nodes_ready.rc == 0
+  changed_when: false
+  ignore_errors: true
+
+- name: Fail if any kinda inner node is not Ready
+  ansible.builtin.assert:
+    that:
+      - kinda_all_nodes_ready is succeeded
+      - kinda_all_nodes_ready.rc == 0
+    fail_msg: "At least one kinda inner node is not Ready: {{ kinda_all_nodes_ready.stdout_lines | default([]) }}"
+
+- name: Hold kinda cluster for stability check
+  ansible.builtin.pause:
+    seconds: "{{ kinda_stability_wait_seconds }}"
+  when: (kinda_stability_wait_seconds | int) > 0
+
+- name: Verify kinda API is still healthy after stability window
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf get --raw=/readyz
+  register: kinda_api_ready_stable
+  changed_when: false
+  ignore_errors: true
+
+- name: Fail if kinda API is unstable
+  ansible.builtin.assert:
+    that:
+      - kinda_api_ready_stable is succeeded
+      - kinda_api_ready_stable.rc == 0
+      - "'ok' in (kinda_api_ready_stable.stdout | lower)"
+    fail_msg: "kinda API server did not stay healthy through the stability window."
+
+- name: Show kinda inner nodes
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane -- kubectl --kubeconfig /etc/kubernetes/admin.conf
+    get nodes --show-labels
+  register: kinda_inner_nodes
+  changed_when: false
+  failed_when: false
+
+- name: Print kinda inner nodes
+  ansible.builtin.debug:
+    var: kinda_inner_nodes.stdout_lines
+  when: kinda_inner_nodes.stdout | default('') | trim != ''
+
+- name: Select generated NetCache switches
+  ansible.builtin.set_fact:
+    kinda_netcache_switches: "{{ kinda_topology_meta.netcache.switchResources }}"
+
+- name: Apply InNetworkDevice CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      metadata:
+        name: innetworkdevices.cache.evalnet.local
+      spec:
+        group: cache.evalnet.local
+        scope: Cluster
+        names:
+          plural: innetworkdevices
+          singular: innetworkdevice
+          kind: InNetworkDevice
+          shortNames:
+            - indev
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+            subresources:
+              status: {}
+            additionalPrinterColumns:
+              - name: Device
+                type: string
+                jsonPath: .spec.deviceName
+              - name: Kind
+                type: string
+                jsonPath: .spec.deviceKind
+              - name: Worker
+                type: string
+                jsonPath: .spec.attachedWorker
+              - name: Phase
+                type: string
+                jsonPath: .status.phase
+            schema:
+              openAPIV3Schema:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    required:
+                      - deviceName
+                      - deviceKind
+                    properties:
+                      deviceName:
+                        type: string
+                      deviceKind:
+                        type: string
+                      attachedWorker:
+                        type: string
+                      attachedNodeId:
+                        type: integer
+                      accessSwitchIp:
+                        type: string
+                      accessWorkerIp:
+                        type: string
+                      clientPodSubnet:
+                        type: string
+                      metricsEndpoint:
+                        type: string
+                      capabilities:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                  status:
+                    type: object
+                    properties:
+                      phase:
+                        type: string
+                      applications:
+                        type: array
+                        items:
+                          type: string
+                      metrics:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+  changed_when: true
+
+- name: Wait for InNetworkDevice CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    wait --for=condition=Established
+    crd/innetworkdevices.cache.evalnet.local
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: false
+
+- name: Apply InNetworkDevice resources in kinda cluster
+  ansible.builtin.include_tasks: in_network_device_resource.yml
+  loop: "{{ kinda_netcache_switches }}"
+  loop_control:
+    loop_var: in_network_device
+    label: "{{ in_network_device.switchName }}"
+  when:
+    - (kinda_netcache_switches) | length > 0
+
+- name: Show InNetworkDevice resources in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    get innetworkdevices.cache.evalnet.local
+  register: kinda_in_network_device_resources
+  changed_when: false
+  failed_when: false
+
+- name: Print InNetworkDevice resources in kinda cluster
+  ansible.builtin.debug:
+    var: kinda_in_network_device_resources.stdout_lines
+  when:
+    - kinda_in_network_device_resources.stdout | default('') | trim != ''
+
+- name: Apply NetCacheSwitch CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      metadata:
+        name: netcacheswitches.cache.evalnet.local
+      spec:
+        group: cache.evalnet.local
+        scope: Cluster
+        names:
+          plural: netcacheswitches
+          singular: netcacheswitch
+          kind: NetCacheSwitch
+          shortNames:
+            - ncsw
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+            subresources:
+              status: {}
+            additionalPrinterColumns:
+              - name: Switch
+                type: string
+                jsonPath: .spec.switchName
+              - name: Worker
+                type: string
+                jsonPath: .spec.attachedWorker
+              - name: Capacity
+                type: integer
+                jsonPath: .spec.capacityEntries
+              - name: Used
+                type: integer
+                jsonPath: .status.usedEntries
+              - name: Free
+                type: integer
+                jsonPath: .status.freeEntries
+              - name: Phase
+                type: string
+                jsonPath: .status.phase
+            schema:
+              openAPIV3Schema:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    required:
+                      - deviceRef
+                      - switchName
+                      - capacityEntries
+                    properties:
+                      deviceRef:
+                        type: string
+                      switchName:
+                        type: string
+                      attachedWorker:
+                        type: string
+                      attachedNodeId:
+                        type: integer
+                      accessSwitchIp:
+                        type: string
+                      accessWorkerIp:
+                        type: string
+                      clientPodSubnet:
+                        type: string
+                      controlAccessSwitch:
+                        type: string
+                      controlAccessNodeId:
+                        type: integer
+                      controlPathCost:
+                        type: integer
+                        minimum: 0
+                      controlEndpoint:
+                        type: object
+                        properties:
+                          host:
+                            type: string
+                          port:
+                            type: integer
+                            minimum: 1
+                          url:
+                            type: string
+                      backendServerName:
+                        type: string
+                      backendServerIp:
+                        type: string
+                      capacityEntries:
+                        type: integer
+                        minimum: 0
+                      capacitySlots:
+                        type: integer
+                        minimum: 0
+                  status:
+                    type: object
+                    properties:
+                      phase:
+                        type: string
+                      usedEntries:
+                        type: integer
+                        minimum: 0
+                      freeEntries:
+                        type: integer
+                        minimum: 0
+                      usedSlots:
+                        type: integer
+                        minimum: 0
+                      freeSlots:
+                        type: integer
+                        minimum: 0
+                      totalCacheRequests:
+                        type: integer
+                        minimum: 0
+                      servedByNetcacheRequests:
+                        type: integer
+                        minimum: 0
+                      fallbackToRedisRequests:
+                        type: integer
+                        minimum: 0
+                      p4Coverage:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+  changed_when: true
+
+- name: Wait for NetCacheSwitch CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    wait --for=condition=Established
+    crd/netcacheswitches.cache.evalnet.local
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: false
+
+- name: Apply NetCacheSwitch resources in kinda cluster
+  ansible.builtin.include_tasks: netcache_switch_resource.yml
+  loop: "{{ kinda_netcache_switches | default([]) }}"
+  loop_control:
+    loop_var: netcache_switch
+    label: "{{ netcache_switch.switchName }}"
+  when:
+    - (kinda_netcache_switches | default([])) | length > 0
+
+- name: Show NetCacheSwitch resources in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    get netcacheswitches.cache.evalnet.local
+  register: kinda_netcache_switch_resources
+  changed_when: false
+  failed_when: false
+
+- name: Print NetCacheSwitch resources in kinda cluster
+  ansible.builtin.debug:
+    var: kinda_netcache_switch_resources.stdout_lines
+  when:
+    - kinda_netcache_switch_resources.stdout | default('') | trim != ''
+
+- name: Select generated NetCache reachability workers
+  ansible.builtin.set_fact:
+    kinda_netcache_reachability_workers: >-
+      {{
+        (((kinda_topology_meta | default({})).get('netcache', {})).get('reachability', {})).get('workers', [])
+      }}
+
+- name: Apply NetCacheReachability CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      metadata:
+        name: netcachereachabilities.cache.evalnet.local
+      spec:
+        group: cache.evalnet.local
+        scope: Cluster
+        names:
+          plural: netcachereachabilities
+          singular: netcachereachability
+          kind: NetCacheReachability
+          shortNames:
+            - ncreach
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+            additionalPrinterColumns:
+              - name: Worker
+                type: string
+                jsonPath: .spec.workerName
+              - name: Attached
+                type: string
+                jsonPath: .spec.attachedSwitch
+            schema:
+              openAPIV3Schema:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    required:
+                      - workerName
+                      - candidates
+                    properties:
+                      workerName:
+                        type: string
+                      attachedSwitch:
+                        type: string
+                      attachedNodeId:
+                        type: integer
+                      candidates:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - switchName
+                            - hops
+                          properties:
+                            switchName:
+                              type: string
+                            switchNodeId:
+                              type: integer
+                            hops:
+                              type: integer
+                              minimum: 0
+                            pathCost:
+                              type: integer
+                              minimum: 0
+  changed_when: true
+  when:
+    - (kinda_netcache_reachability_workers | default([])) | length > 0
+
+- name: Wait for NetCacheReachability CRD in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    wait --for=condition=Established
+    crd/netcachereachabilities.cache.evalnet.local
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: false
+  when:
+    - (kinda_netcache_reachability_workers | default([])) | length > 0
+
+- name: Apply NetCacheReachability resources in kinda cluster
+  ansible.builtin.include_tasks: netcache_reachability_resource.yml
+  loop: "{{ kinda_netcache_reachability_workers | default([]) }}"
+  loop_control:
+    loop_var: netcache_reachability_worker
+    label: "{{ netcache_reachability_worker.workerName }}"
+  when:
+    - (kinda_netcache_reachability_workers | default([])) | length > 0
+
+- name: Discover kinda control-plane pod IP for in-cluster API access
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    get pod kinda-control-plane
+    -o jsonpath={.status.podIP}
+  register: kinda_control_plane_pod_ip
+  changed_when: false
+
+- name: Deploy NetCache scheduler plugin in kinda cluster
+  ansible.builtin.include_tasks: netcache_scheduler.yml
+  when:
+    - (kinda_netcache_switches | default([])) | length > 0
+
+- name: Deploy NetCache request controller in kinda cluster
+  ansible.builtin.include_tasks: netcache_controller.yml
+  when:
+    - (kinda_netcache_switches | default([])) | length > 0
+
+- name: Deploy InNetworkDevice metrics collectors in kinda cluster
+  ansible.builtin.include_tasks: in_network_device_metrics_collector.yml
+  loop: "{{ kinda_netcache_switches | default([]) }}"
+  loop_control:
+    loop_var: in_network_device_metrics
+    label: "{{ in_network_device_metrics.switchName }}"
+  when:
+    - netcache_metrics_mode == 'cluster'
+    - (kinda_netcache_switches | default([])) | length > 0

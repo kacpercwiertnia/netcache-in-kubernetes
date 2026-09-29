@@ -1,0 +1,12 @@
+---
+- name: Ensure shared P4 assets directory exists on control plane
+  ansible.builtin.file:
+    path: /home/shared/p4
+    state: directory
+    mode: "0755"
+
+- name: Copy compiled NetCache program to control plane
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../.generated/p4/netcache.json"
+    dest: /home/shared/p4/netcache.json
+    mode: "0644"

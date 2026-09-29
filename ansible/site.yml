@@ -1,0 +1,10 @@
+---
+- name: Configure Megalos and Kathara on control plane
+  hosts: control
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: wait_for_microk8s
+    - role: megalos
+    - role: kathara

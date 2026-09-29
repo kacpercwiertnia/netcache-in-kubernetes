@@ -1,0 +1,127 @@
+---
+- name: Install local CNI config in kinda worker {{ worker.name }}
+  ansible.builtin.shell: |
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }} exec -i {{ worker.name }} -- /bin/bash -lc 'mkdir -p /etc/cni/net.d && cat >/etc/cni/net.d/10-kinda-local.conflist' <<'EOF'
+    {
+      "cniVersion": "1.0.0",
+      "name": "kinda-local",
+      "plugins": [
+        {
+          "type": "ptp",
+          "ipMasq": false,
+          "ipam": {
+            "type": "host-local",
+            "subnet": "172.30.{{ (worker.attached_node_id | int) + 1 }}.0/24",
+            "routes": [{ "dst": "0.0.0.0/0" }]
+          }
+        },
+        {
+          "type": "portmap",
+          "capabilities": { "portMappings": true }
+        }
+      ]
+    }
+    EOF
+  args:
+    executable: /bin/bash
+  changed_when: true
+
+- name: Configure Kathara access interface in kinda worker {{ worker.name }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec {{ worker.name }} -- /bin/bash -lc
+    'set -e;
+    ip link set {{ kinda_access_interface_name }} down || true;
+    ip link set {{ kinda_access_interface_name }} address {{ worker.access_worker_mac }};
+    ip addr replace {{ worker.access_worker_ip }} dev {{ kinda_access_interface_name }};
+    ip link set {{ kinda_access_interface_name }} up;
+    {% for prefix in kinda_access_route_prefixes %}
+    ip route replace {{ prefix }} via {{ worker.access_switch_ip.split('/')[0] }} dev {{ kinda_access_interface_name }};
+    {% endfor %}
+    sysctl -w net.ipv4.ip_forward=1'
+  changed_when: true
+  when:
+    - worker.access_lan is defined
+    - worker.access_worker_ip is defined
+    - worker.access_worker_mac is defined
+
+- name: Configure kubelet cgroup root and swap handling in kinda worker {{ worker.name }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec {{ worker.name }} -- /bin/bash -lc
+    'bash /etc/kinda/bootstrap/node-cgroups.sh'
+  changed_when: true
+
+- name: Wait for kinda API before joining {{ worker.name }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf get --raw=/readyz
+  register: kinda_single_api_ready_before_join
+  retries: 60
+  delay: 5
+  until: kinda_single_api_ready_before_join.rc == 0 and 'ok' in (kinda_single_api_ready_before_join.stdout | lower)
+  changed_when: false
+
+- name: Join kinda worker {{ worker.name }} to control-plane
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec {{ worker.name }} -- /bin/bash -lc
+    'timeout {{ kinda_join_command_timeout }} {{ kinda_join_command.stdout }} --node-name {{ worker.name }} --ignore-preflight-errors=all'
+  register: kinda_single_worker_join
+  retries: "{{ kinda_join_retries }}"
+  delay: "{{ kinda_join_retry_delay_seconds }}"
+  until: >-
+    kinda_single_worker_join.rc == 0
+    or 'already exists' in (kinda_single_worker_join.stderr | default(''))
+    or 'already exists' in (kinda_single_worker_join.stdout | default(''))
+  changed_when: true
+  failed_when:
+    - kinda_single_worker_join.rc != 0
+    - "'already exists' not in (kinda_single_worker_join.stderr | default(''))"
+    - "'already exists' not in (kinda_single_worker_join.stdout | default(''))"
+
+- name: Wait for kinda API after joining {{ worker.name }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf get --raw=/readyz
+  register: kinda_single_api_ready
+  retries: 60
+  delay: 5
+  until: kinda_single_api_ready.rc == 0 and 'ok' in (kinda_single_api_ready.stdout | lower)
+  changed_when: false
+
+- name: Give kinda control-plane a short settle window after joining {{ worker.name }}
+  ansible.builtin.pause:
+    seconds: "{{ kinda_worker_join_settle_seconds }}"
+  when: (kinda_worker_join_settle_seconds | int) > 0
+
+- name: Wait until inner node {{ worker.name }} is Ready
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf wait
+    --for=condition=Ready node/{{ worker.name }}
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  register: kinda_single_node_ready
+  retries: "{{ kinda_node_ready_retries }}"
+  delay: "{{ kinda_node_ready_retry_delay_seconds }}"
+  until: kinda_single_node_ready.rc == 0
+  changed_when: false
+
+- name: Label kinda inner worker node {{ worker.name }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane -- kubectl --kubeconfig /etc/kubernetes/admin.conf
+    label node {{ worker.name }}
+    topology.local/access-switch={{ worker.attached_switch }}
+    topology.local/access-node-id={{ worker.attached_node_id }}
+    topology.local/netcache-capable={{ (worker.netcache_capable | default(false) | bool) | ternary('true', 'false') }}
+    topology.local/netcache-active={{ (worker.netcache_active | default(false) | bool) | ternary('true', 'false') }}
+    --overwrite
+  register: kinda_single_worker_label
+  retries: 20
+  delay: 5
+  until: kinda_single_worker_label.rc == 0
+  changed_when: true

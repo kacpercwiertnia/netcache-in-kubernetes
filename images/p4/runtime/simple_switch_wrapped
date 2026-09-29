@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+export LD_LIBRARY_PATH="/opt/p4/lib:${LD_LIBRARY_PATH:-}"
+export PYTHONPATH="/usr/local/lib/python3.10/site-packages:/opt/p4/pydeps:/opt/p4/cli:/opt/p4:/opt/behavioral-model/tools:${PYTHONPATH:-}"
+exec /opt/p4/bin/simple_switch "$@"

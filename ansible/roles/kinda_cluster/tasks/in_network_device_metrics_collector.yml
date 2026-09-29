@@ -1,0 +1,71 @@
+---
+- name: Deploy InNetworkDevice metrics collector for {{ in_network_device_metrics.switchName }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: in-network-device-metrics-{{ in_network_device_metrics_name }}
+        namespace: default
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: in-network-device-metrics
+            cache.evalnet.local/device: "{{ in_network_device_metrics_name }}"
+        template:
+          metadata:
+            labels:
+              app: in-network-device-metrics
+              cache.evalnet.local/device: "{{ in_network_device_metrics_name }}"
+          spec:
+            serviceAccountName: netcache-controller
+            hostNetwork: true
+            dnsPolicy: ClusterFirstWithHostNet
+            nodeSelector:
+              {{ in_network_device_metrics_node_selector_key }}: "{{ in_network_device_metrics_node_selector_value }}"
+            containers:
+              - name: collector
+                image: {{ kinda_netcache_controller_image }}
+                imagePullPolicy: IfNotPresent
+                command:
+                  - python
+                  - /opt/netcache-controller/in-network-device-metrics-collector.py
+                env:
+                  - name: DEVICE_NAME
+                    value: "{{ in_network_device_metrics_name }}"
+                  - name: SWITCH_METRICS_URL
+                    value: "{{ in_network_device_metrics_url }}"
+                  - name: POLL_SECONDS
+                    value: "{{ kinda_in_network_device_metrics_poll_seconds }}"
+                  - name: NETCACHE_HIT_CPU_COST
+                    value: "{{ kinda_in_network_device_metrics_hit_cpu_cost }}"
+                  - name: NETCACHE_MISS_CPU_COST
+                    value: "{{ kinda_in_network_device_metrics_miss_cpu_cost }}"
+                  - name: NETCACHE_CPU_BUDGET_PPS
+                    value: "{{ kinda_in_network_device_metrics_cpu_budget_pps }}"
+                  - name: KUBERNETES_SERVICE_HOST
+                    value: "{{ kinda_control_plane_pod_ip.stdout }}"
+                  - name: KUBERNETES_SERVICE_PORT
+                    value: "6443"
+                volumeMounts:
+                  - name: controller-script
+                    mountPath: /opt/netcache-controller
+            volumes:
+              - name: controller-script
+                configMap:
+                  name: netcache-controller
+  changed_when: true
+  vars:
+    in_network_device_metrics_name: "{{ in_network_device_metrics.switchName }}"
+    in_network_device_metrics_attached_switch: "{{ in_network_device_metrics.switchName }}"
+    in_network_device_metrics_url: "{{ in_network_device_metrics.controlEndpoint.url }}/metrics"
+    in_network_device_metrics_has_attached_worker: "{{ (in_network_device_metrics.attachedWorker | default('')) | length > 0 }}"
+    in_network_device_metrics_control_access_switch: "{{ in_network_device_metrics.controlAccessSwitch }}"
+    in_network_device_metrics_node_selector_key: "topology.local/access-switch"
+    in_network_device_metrics_node_selector_value: "{{ in_network_device_metrics_has_attached_worker | bool | ternary(in_network_device_metrics_attached_switch, in_network_device_metrics_control_access_switch) }}"

@@ -1,0 +1,7 @@
+---
+kinda_netcache_scheduler_image: docker.io/kacpercwiertnia/netcache-scheduler:dev@sha256:7791eaed80370e2295cf1d542e5c1a8e98359c88e42c6f5b3479c7fa9226ab8b
+kinda_netcache_controller_client_image: docker.io/kacpercwiertnia/netcache-client:values-f89671e@sha256:cfb21ebd6ad39a50ecd3ee49aac87039484d2d545e0391f074e3ecbdf567a859
+kinda_node_image: kindest/node:v1.35.1@sha256:05d7bcdefbda08b4e038f644c4df690cdac3fba8b06f8289f30e10026720a1ab
+kinda_in_network_device_metrics_hit_cpu_cost: "1.0"
+kinda_in_network_device_metrics_miss_cpu_cost: "8.0"
+kinda_in_network_device_metrics_cpu_budget_pps: "100000.0"

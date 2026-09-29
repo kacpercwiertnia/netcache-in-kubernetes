@@ -1,0 +1,17 @@
+{
+  "image": "{{ kathara_image }}",
+  "manager_type": "kubernetes",
+  "terminal": "{{ kathara_terminal }}",
+  "open_terminals": {{ kathara_open_terminals | tojson }},
+  "device_shell": "{{ kathara_device_shell }}",
+  "net_prefix": "{{ kathara_net_prefix }}",
+  "device_prefix": "kathara",
+  "debug_level": "{{ kathara_debug_level }}",
+  "print_startup_log": {{ kathara_print_startup_log | tojson }},
+  "enable_ipv6": {{ kathara_enable_ipv6 | tojson }},
+  "api_server_url": null,
+  "api_token": null,
+  "host_shared": {{ kathara_host_shared | tojson }},
+  "image_pull_policy": "{{ kathara_image_pull_policy }}",
+  "docker_config_json": null
+}

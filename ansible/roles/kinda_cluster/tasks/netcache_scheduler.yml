@@ -1,0 +1,203 @@
+---
+- name: Apply NetCache scheduler RBAC and deployment in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: netcache-scheduler
+        namespace: default
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: netcache-scheduler
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps
+            - namespaces
+            - pods
+            - persistentvolumeclaims
+            - persistentvolumes
+            - replicationcontrollers
+            - services
+            - nodes
+            - events
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - ""
+          resources:
+            - pods
+            - pods/binding
+            - events
+          verbs:
+            - create
+            - patch
+            - update
+        - apiGroups:
+            - apps
+          resources:
+            - replicasets
+            - statefulsets
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - policy
+          resources:
+            - poddisruptionbudgets
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - storage.k8s.io
+          resources:
+            - csidrivers
+            - csinodes
+            - csistoragecapacities
+            - storageclasses
+            - volumeattachments
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - cache.evalnet.local
+          resources:
+            - innetworkdevices
+            - netcachereachabilities
+            - netcacheswitches
+          verbs:
+            - get
+            - list
+            - watch
+        - apiGroups:
+            - cache.evalnet.local
+          resources:
+            - netcacheswitches/status
+          verbs:
+            - get
+            - patch
+            - update
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: netcache-scheduler
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: netcache-scheduler
+      subjects:
+        - kind: ServiceAccount
+          name: netcache-scheduler
+          namespace: default
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: netcache-scheduler-config
+        namespace: default
+      data:
+        scheduler-config.yml: |
+          apiVersion: kubescheduler.config.k8s.io/v1
+          kind: KubeSchedulerConfiguration
+          leaderElection:
+            leaderElect: false
+          profiles:
+            - schedulerName: {{ kinda_netcache_scheduler_name }}
+              plugins:
+                preFilter:
+                  enabled:
+                    - name: NetCacheAware
+                filter:
+                  enabled:
+                    - name: NetCacheAware
+                score:
+                  enabled:
+                    - name: NetCacheAware
+                      weight: 1
+                reserve:
+                  enabled:
+                    - name: NetCacheAware
+                postBind:
+                  enabled:
+                    - name: NetCacheAware
+      ---
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: netcache-scheduler
+        namespace: default
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: netcache-scheduler
+        template:
+          metadata:
+            labels:
+              app: netcache-scheduler
+          spec:
+            serviceAccountName: netcache-scheduler
+            nodeSelector:
+              kubernetes.io/hostname: kinda-control-plane
+            tolerations:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+                effect: NoSchedule
+              - key: node-role.kubernetes.io/master
+                operator: Exists
+                effect: NoSchedule
+            containers:
+              - name: scheduler
+                image: {{ kinda_netcache_scheduler_image }}
+                imagePullPolicy: {{ kinda_netcache_scheduler_image_pull_policy }}
+                command:
+                  - /usr/local/bin/netcache-scheduler
+                  - --config=/etc/netcache-scheduler/scheduler-config.yml
+                  - --v=3
+                env:
+                  - name: KUBERNETES_SERVICE_HOST
+                    value: "{{ kinda_control_plane_pod_ip.stdout }}"
+                  - name: KUBERNETES_SERVICE_PORT
+                    value: "6443"
+                  - name: NETCACHE_CAPACITY_WEIGHT
+                    value: "{{ kinda_netcache_scheduler_capacity_weight }}"
+                  - name: NETCACHE_DEVICE_WEIGHT
+                    value: "{{ kinda_netcache_scheduler_device_weight }}"
+                  - name: NETCACHE_HOP_WEIGHT
+                    value: "{{ kinda_netcache_scheduler_hop_weight }}"
+                  - name: NETCACHE_WORKER_WEIGHT
+                    value: "{{ kinda_netcache_scheduler_worker_weight }}"
+                volumeMounts:
+                  - name: scheduler-config
+                    mountPath: /etc/netcache-scheduler
+                    readOnly: true
+            volumes:
+              - name: scheduler-config
+                configMap:
+                  name: netcache-scheduler-config
+  changed_when: true
+
+- name: Wait for NetCache scheduler deployment in kinda cluster
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    -n default
+    rollout status deployment/netcache-scheduler
+    --timeout={{ kinda_wait_timeout_seconds }}s
+  changed_when: false

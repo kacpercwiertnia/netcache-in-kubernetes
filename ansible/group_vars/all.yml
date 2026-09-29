@@ -1,0 +1,30 @@
+---
+remote_host_user: "{{ ansible_user }}"
+remote_home: "/home/{{ remote_host_user }}"
+ansible_ssh_timeout: 60
+
+megalos_manifest_url: https://raw.githubusercontent.com/KatharaFramework/Megalos-CNI/fdc9cc63e9e35ee2e227a98dd75c379b8ab86706/kathara-daemonset.yml
+
+# Kathara configuration
+kathara_image: "kathara/base:latest@sha256:8a2e70ac8f51bb283b8549fd686f65f9a1ef4487fe2c81849cb74d301e61970b"
+kathara_terminal: "TMUX"
+kathara_open_terminals: false
+kathara_device_shell: "/bin/bash"
+kathara_net_prefix: "kathara"
+kathara_debug_level: "INFO"
+kathara_print_startup_log: true
+kathara_enable_ipv6: false
+kathara_host_shared: true
+kathara_image_pull_policy: "IfNotPresent"
+
+# Topology pipeline configuration
+topology_workspace_dir: "{{ remote_home }}/topology-workspace"
+topology_output_dir: "{{ topology_workspace_dir }}/outputs"
+topology_lab_name: "GeneratedGraphLab"
+topology_lab_dir: "{{ topology_output_dir }}/{{ topology_lab_name }}"
+
+# NetCache payload and runtime for generated NetCache topologies.
+netcache_payload_local_dir: "{{ playbook_dir }}/../.deps/netcache/src"
+netcache_payload_remote_dir: "/tmp/netcache-kathara-payload"
+
+# The generated topology flow derives switch/host names, IPs and MACs from topology.meta.json.

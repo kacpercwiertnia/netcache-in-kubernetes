@@ -1,0 +1,64 @@
+---
+- name: Apply NetCacheSwitch resource for {{ netcache_switch.switchName }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: cache.evalnet.local/v1alpha1
+      kind: NetCacheSwitch
+      metadata:
+        name: "{{ netcache_switch_name }}"
+        labels:
+          topology.local/netcache-switch: "{{ netcache_switch_name }}"
+          topology.local/switch-node-id: "{{ netcache_switch_node_id }}"
+          topology.local/control-access-switch: "{{ netcache_switch_control_access_switch }}"
+          topology.local/attached-worker: "{{ netcache_switch_attached_worker }}"
+      spec:
+        deviceRef: "{{ netcache_switch_device_ref }}"
+        switchName: "{{ netcache_switch_name }}"
+        attachedWorker: "{{ netcache_switch_attached_worker }}"
+        attachedNodeId: {{ netcache_switch_attached_node_id | int }}
+        accessSwitchIp: "{{ netcache_switch_access_switch_ip }}"
+        accessWorkerIp: "{{ netcache_switch_access_worker_ip }}"
+        clientPodSubnet: "{{ netcache_switch_client_pod_subnet }}"
+        controlAccessSwitch: "{{ netcache_switch_control_access_switch }}"
+        controlAccessNodeId: {{ netcache_switch_control_access_node_id | int }}
+        controlPathCost: {{ netcache_switch_control_path_cost | int }}
+        controlEndpoint: {{ netcache_switch_control_endpoint | to_json }}
+        backendServerName: "{{ netcache_switch_backend_server_name }}"
+        backendServerIp: "{{ netcache_switch_backend_server_ip }}"
+        capacityEntries: {{ kinda_netcache_switch_capacity_entries | int }}
+        capacitySlots: {{ kinda_netcache_switch_capacity_slots | int }}
+  changed_when: true
+  vars:
+    netcache_switch_name: "{{ netcache_switch.switchName }}"
+    netcache_switch_node_id: "{{ netcache_switch.switchNodeId }}"
+    netcache_switch_device_ref: "{{ netcache_switch.deviceRef }}"
+    netcache_switch_attached_worker: "{{ netcache_switch.attachedWorker | default('') }}"
+    netcache_switch_attached_node_id: "{{ netcache_switch.attachedNodeId | default(-1) }}"
+    netcache_switch_access_switch_ip: "{{ netcache_switch.accessSwitchIp | default('') }}"
+    netcache_switch_access_worker_ip: "{{ netcache_switch.accessWorkerIp | default('') }}"
+    netcache_switch_client_pod_subnet: "{{ netcache_switch.clientPodSubnet | default('') }}"
+    netcache_switch_control_access_switch: "{{ netcache_switch.controlAccessSwitch }}"
+    netcache_switch_control_access_node_id: "{{ netcache_switch.controlAccessNodeId }}"
+    netcache_switch_control_path_cost: "{{ netcache_switch.controlPathCost }}"
+    netcache_switch_backend_server_name: "{{ netcache_switch.backendServerName }}"
+    netcache_switch_backend_server_ip: "{{ netcache_switch.backendServerIp }}"
+    netcache_switch_control_endpoint: "{{ netcache_switch.controlEndpoint }}"
+
+- name: Initialize NetCacheSwitch status for {{ netcache_switch.switchName }}
+  ansible.builtin.shell: |
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }} exec kinda-control-plane -- \
+      kubectl --kubeconfig /etc/kubernetes/admin.conf \
+      patch netcacheswitches.cache.evalnet.local {{ netcache_switch_name }} \
+      --subresource=status \
+      --type=merge \
+      -p '{"status":{"phase":"Available","usedEntries":0,"freeEntries":{{ kinda_netcache_switch_capacity_entries | int }},"usedSlots":0,"freeSlots":{{ kinda_netcache_switch_capacity_slots | int }},"totalCacheRequests":0,"servedByNetcacheRequests":0,"fallbackToRedisRequests":0,"p4Coverage":0}}'
+  args:
+    executable: /bin/bash
+  changed_when: true
+  vars:
+    netcache_switch_name: "{{ netcache_switch.switchName }}"

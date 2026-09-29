@@ -1,0 +1,55 @@
+---
+- name: Apply InNetworkDevice resource for {{ in_network_device.switchName }}
+  ansible.builtin.command: >-
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }}
+    exec -i kinda-control-plane --
+    kubectl --kubeconfig /etc/kubernetes/admin.conf
+    apply -f -
+  args:
+    stdin: |
+      apiVersion: cache.evalnet.local/v1alpha1
+      kind: InNetworkDevice
+      metadata:
+        name: "{{ in_network_device_name }}"
+        labels:
+          topology.local/netcache-switch: "{{ in_network_device_name }}"
+          topology.local/switch-node-id: "{{ in_network_device_node_id }}"
+          topology.local/control-access-switch: "{{ in_network_device_control_access_switch }}"
+          topology.local/attached-worker: "{{ in_network_device_attached_worker }}"
+      spec:
+        deviceName: "{{ in_network_device_name }}"
+        deviceKind: "switch"
+        attachedWorker: "{{ in_network_device_attached_worker }}"
+        attachedNodeId: {{ in_network_device_attached_node_id | int }}
+        accessSwitchIp: "{{ in_network_device_access_switch_ip }}"
+        accessWorkerIp: "{{ in_network_device_access_worker_ip }}"
+        clientPodSubnet: "{{ in_network_device_client_pod_subnet }}"
+        metricsEndpoint: "{{ in_network_device_metrics_url }}"
+        capabilities:
+          netcache: true
+          programmableDataPlane: true
+  changed_when: true
+  vars:
+    in_network_device_name: "{{ in_network_device.switchName }}"
+    in_network_device_node_id: "{{ in_network_device.switchNodeId }}"
+    in_network_device_attached_worker: "{{ in_network_device.attachedWorker | default('') }}"
+    in_network_device_attached_node_id: "{{ in_network_device.attachedNodeId | default(-1) }}"
+    in_network_device_access_switch_ip: "{{ in_network_device.accessSwitchIp | default('') }}"
+    in_network_device_access_worker_ip: "{{ in_network_device.accessWorkerIp | default('') }}"
+    in_network_device_client_pod_subnet: "{{ in_network_device.clientPodSubnet | default('') }}"
+    in_network_device_control_access_switch: "{{ in_network_device.controlAccessSwitch }}"
+    in_network_device_metrics_url: "{{ in_network_device.controlEndpoint.url }}/metrics"
+
+- name: Initialize InNetworkDevice status for {{ in_network_device.switchName }}
+  ansible.builtin.shell: |
+    {{ kinda_kubectl_command }} -n {{ kinda_namespace }} exec kinda-control-plane -- \
+      kubectl --kubeconfig /etc/kubernetes/admin.conf \
+      patch innetworkdevices.cache.evalnet.local {{ in_network_device_name }} \
+      --subresource=status \
+      --type=merge \
+      -p '{"status":{"phase":"Ready","applications":["netcache"]}}'
+  args:
+    executable: /bin/bash
+  changed_when: true
+  vars:
+    in_network_device_name: "{{ in_network_device.switchName }}"

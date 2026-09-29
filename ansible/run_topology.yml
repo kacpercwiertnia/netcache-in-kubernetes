@@ -1,0 +1,41 @@
+---
+- name: Stage the compiled P4 program on control plane
+  hosts: control
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Validate metrics mode before deployment
+      ansible.builtin.assert:
+        that:
+          - netcache_metrics_mode in ['cluster', 'ssh']
+        fail_msg: "NETCACHE_METRICS_MODE must be cluster or ssh"
+      vars:
+        netcache_metrics_mode: "{{ lookup('env', 'NETCACHE_METRICS_MODE') | default('cluster', true) }}"
+
+  roles:
+    - role: p4_assets
+
+- name: Upload and run generated topology on control plane
+  hosts: control
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: topology_pipeline
+
+- name: Bootstrap generated NetCache topology on control plane
+  hosts: control
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: generated_netcache_topology
+
+- name: Start kinda cluster next to generated Kathara topology
+  hosts: control
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: kinda_cluster

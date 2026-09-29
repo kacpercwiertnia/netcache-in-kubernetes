@@ -1,0 +1,120 @@
+---
+- name: Enable community addons repo
+  ansible.builtin.command: microk8s enable community
+  register: enable_community
+  changed_when: >-
+    'Nothing to do' not in (enable_community.stdout | default('')) and
+    'already enabled' not in (enable_community.stdout | default(''))
+  failed_when: >
+    enable_community.rc != 0 and
+    'already enabled' not in (enable_community.stdout | default('')) and
+    'Nothing to do' not in (enable_community.stdout | default(''))
+
+- name: Check whether Multus daemonset already exists
+  ansible.builtin.command: >
+    microk8s kubectl -n kube-system get ds kube-multus-ds
+  register: multus_ds_check
+  changed_when: false
+  failed_when: false
+
+- name: Enable Multus addon if missing
+  ansible.builtin.command: microk8s enable multus
+  register: multus_enable
+  when: multus_ds_check.rc != 0
+  changed_when: true
+  failed_when: false
+
+- name: Wait for Multus daemonset to be created
+  ansible.builtin.command: >
+    microk8s kubectl -n kube-system get ds kube-multus-ds -o jsonpath={.metadata.name}
+  register: multus_ds_created
+  retries: 30
+  delay: 5
+  until: multus_ds_created.rc == 0 and multus_ds_created.stdout == "kube-multus-ds"
+  changed_when: false
+
+- name: Wait for Multus daemonset rollout
+  ansible.builtin.command: >
+    microk8s kubectl -n kube-system rollout status ds/kube-multus-ds --timeout=180s
+  register: multus_rollout
+  retries: 3
+  delay: 10
+  changed_when: false
+
+- name: Resolve control-plane node name from remote hostname
+  ansible.builtin.set_fact:
+    resolved_control_plane_node_name: "{{ ansible_facts['hostname'] }}"
+
+- name: Ensure current host exists as Kubernetes node
+  ansible.builtin.command: >
+    microk8s kubectl get node {{ resolved_control_plane_node_name }}
+  register: current_node_exists
+  changed_when: false
+  failed_when: false
+
+- name: Fail if current host name is not a Kubernetes node
+  ansible.builtin.fail:
+    msg: >-
+      Current host name '{{ resolved_control_plane_node_name }}' was not found among Kubernetes nodes.
+      Run 'microk8s kubectl get nodes' and verify hostname mapping.
+  when: current_node_exists.rc != 0
+
+- name: Label control-plane node
+  ansible.builtin.command: >-
+    microk8s kubectl label node {{ resolved_control_plane_node_name }}
+    node-role.kubernetes.io/control-plane= --overwrite
+  register: control_plane_label
+  changed_when: >-
+    'labeled' in (control_plane_label.stdout | default('')) or
+    'not labeled' not in (control_plane_label.stdout | default(''))
+
+- name: Taint control-plane node to block normal workloads
+  ansible.builtin.command: >-
+    microk8s kubectl taint node {{ resolved_control_plane_node_name }}
+    node-role.kubernetes.io/control-plane=:NoSchedule --overwrite
+  register: control_plane_taint
+  changed_when: >-
+    'tainted' in (control_plane_taint.stdout | default('')) or
+    'already has' not in (control_plane_taint.stdout | default(''))
+
+- name: Apply Megalos CNI manifest
+  ansible.builtin.command: >-
+    microk8s kubectl apply -f {{ megalos_manifest_url }}
+  register: megalos_apply
+  changed_when: >-
+    'created' in (megalos_apply.stdout | default('')) or
+    'configured' in (megalos_apply.stdout | default(''))
+
+- name: Wait for Megalos control-plane deployment to exist
+  ansible.builtin.command: microk8s kubectl -n kube-system get deployment kube-kathara-control-plane
+  register: megalos_control_exists
+  retries: 60
+  delay: 5
+  until: megalos_control_exists.rc == 0
+  changed_when: false
+
+- name: Wait for Megalos worker daemonset to exist
+  ansible.builtin.command: microk8s kubectl -n kube-system get daemonset kube-kathara-worker-ds
+  register: megalos_worker_exists
+  retries: 60
+  delay: 5
+  until: megalos_worker_exists.rc == 0
+  changed_when: false
+
+- name: Wait for Megalos control-plane rollout
+  ansible.builtin.command: microk8s kubectl -n kube-system rollout status deployment/kube-kathara-control-plane --timeout=180s
+  changed_when: false
+
+- name: Wait for Megalos worker rollout
+  ansible.builtin.command: microk8s kubectl -n kube-system rollout status daemonset/kube-kathara-worker-ds --timeout=180s
+  changed_when: false
+
+- name: Show Megalos-related pods
+  ansible.builtin.shell: |
+    microk8s kubectl get pods -n kube-system -o wide | egrep 'multus|kathara' || true
+  register: megalos_pods
+  changed_when: false
+
+- name: Print Megalos-related pods
+  ansible.builtin.debug:
+    var: megalos_pods.stdout_lines

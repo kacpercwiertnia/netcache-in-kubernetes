@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ worker.name }}
+  namespace: {{ kinda_namespace }}
+  labels:
+    app.kubernetes.io/name: {{ worker.name }}
+    app.kubernetes.io/part-of: kinda
+    kinda.local/role: worker
+    topology.local/access-switch: {{ worker.attached_switch }}
+    topology.local/access-node-id: "{{ worker.attached_node_id }}"
+    topology.local/netcache-capable: "{{ (worker.netcache_capable | default(false) | bool) | ternary('true', 'false') }}"
+    topology.local/netcache-active: "{{ (worker.netcache_active | default(false) | bool) | ternary('true', 'false') }}"
+{% if worker.access_lan is defined %}
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[{"name":"{{ kinda_kathara_network_prefix }}-{{ worker.access_lan }}","interface":"{{ kinda_access_interface_name }}"}]'
+{% endif %}
+spec:
+  hostname: {{ worker.name }}
+  nodeName: {{ kinda_worker_outer_node_map[worker.name] }}
+  restartPolicy: Always
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/part-of: kinda
+            topologyKey: kubernetes.io/hostname
+  containers:
+    - name: node
+      image: {{ kinda_node_image }}
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: KINDA_NODE_UID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          cpu: {{ kinda_worker_cpu_request }}
+          memory: {{ kinda_worker_memory_request }}
+      volumeMounts:
+        - name: bootstrap
+          mountPath: /etc/kinda/bootstrap
+          readOnly: true
+        - name: cgroup
+          mountPath: /sys/fs/cgroup
+        - name: lib-modules
+          mountPath: /lib/modules
+          readOnly: true
+        - name: var-lib-containerd
+          mountPath: /var/lib/containerd
+        - name: var-lib-kubelet
+          mountPath: /var/lib/kubelet
+        - name: run
+          mountPath: /run
+        - name: tmp
+          mountPath: /tmp
+  volumes:
+    - name: bootstrap
+      configMap:
+        name: {{ kinda_bootstrap_configmap_name }}
+        defaultMode: 0755
+    - name: cgroup
+      hostPath:
+        path: /sys/fs/cgroup
+    - name: lib-modules
+      hostPath:
+        path: /lib/modules
+    - name: var-lib-containerd
+      emptyDir: {}
+    - name: var-lib-kubelet
+      emptyDir: {}
+    - name: run
+      emptyDir: {}
+    - name: tmp
+      emptyDir: {}
